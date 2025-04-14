@@ -47,11 +47,11 @@
   color: var(--dark-gray);
   font-size: 0.875rem;
   text-decoration: none;
-  
+
   &:hover {
     color: var(--primary);
   }
-  
+
   svg {
     width: 16px;
     height: 16px;
@@ -63,7 +63,7 @@
   align-items: flex-start;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
   }
@@ -80,7 +80,7 @@
   align-items: center;
   justify-content: center;
   background-color: var(--white);
-  
+
   img {
     max-width: 80%;
     max-height: 80%;
@@ -96,7 +96,7 @@
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  
+
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }
@@ -121,11 +121,11 @@
   gap: 0.5rem;
   font-size: 0.875rem;
   color: var(--dark-gray);
-  
+
   svg {
     color: var(--primary);
   }
-  
+
   &.salary {
     font-weight: 600;
     color: var(--success);
@@ -136,7 +136,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
-  
+
   @media (max-width: 576px) {
     gap: 1rem;
   }
@@ -153,13 +153,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: conic-gradient(var(--primary) 0deg, var(--primary) calc(var(--percentage) * 3.6deg), var(--light-gray) calc(var(--percentage) * 3.6deg), var(--light-gray) 360deg);
+  background: conic-gradient(
+    var(--primary) 0deg,
+    var(--primary) calc(var(--percentage) * 3.6deg),
+    var(--light-gray) calc(var(--percentage) * 3.6deg),
+    var(--light-gray) 360deg
+  );
   --percentage: 75;
   position: relative;
   margin: 0 auto;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 48px;
     height: 48px;
@@ -200,11 +205,11 @@
 .job-actions {
   display: flex;
   gap: 1rem;
-  
+
   @media (max-width: 576px) {
     flex-direction: column;
   }
-  
+
   .btn {
     flex: 1;
     display: flex;
@@ -219,17 +224,17 @@
   border: 1px solid var(--medium-gray);
   color: var(--dark-gray);
   transition: all 0.2s ease;
-  
+
   &:hover {
     border-color: var(--primary);
     color: var(--primary);
   }
-  
+
   &.saved {
     background-color: rgba(67, 24, 209, 0.1);
     border-color: var(--primary);
     color: var(--primary);
-    
+
     svg {
       fill: var(--primary);
     }
@@ -241,7 +246,7 @@
   border: 1px solid var(--medium-gray);
   color: var(--dark-gray);
   transition: all 0.2s ease;
-  
+
   &:hover {
     border-color: var(--primary);
     color: var(--primary);
@@ -253,7 +258,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 1.5rem;
-  
+
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
   }
@@ -283,9 +288,9 @@
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-  
+
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
@@ -294,14 +299,14 @@
     background-color: transparent;
     transition: background-color 0.2s ease;
   }
-  
+
   &:hover {
     color: var(--primary);
   }
-  
+
   &.active {
     color: var(--primary);
-    
+
     &::after {
       background-color: var(--primary);
     }
@@ -312,7 +317,7 @@
 .tab-content {
   display: none;
   padding: 1.5rem;
-  
+
   &.active {
     display: block;
   }
@@ -328,7 +333,7 @@
 
 .job-section {
   margin-bottom: 2rem;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -338,7 +343,7 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  
+
   @media (max-width: 768px) {
     font-size: 1.125rem;
   }
@@ -347,11 +352,11 @@
 .job-list {
   list-style-type: disc;
   padding-left: 1.5rem;
-  
+
   li {
     margin-bottom: 0.75rem;
     line-height: 1.5;
-    
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -365,14 +370,14 @@
     align-items: center;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
-    
+
     @media (max-width: 576px) {
       flex-direction: column;
       align-items: flex-start;
       gap: 1rem;
     }
   }
-  
+
   .company-logo {
     width: 80px;
     height: 80px;
@@ -384,14 +389,14 @@
     align-items: center;
     justify-content: center;
     background-color: var(--white);
-    
+
     img {
       max-width: 80%;
       max-height: 80%;
       object-fit: contain;
     }
   }
-  
+
   .company-name {
     h2 {
       font-size: 1.5rem;
@@ -399,7 +404,7 @@
       margin-bottom: 0.5rem;
     }
   }
-  
+
   .company-website {
     display: inline-flex;
     align-items: center;
@@ -407,12 +412,12 @@
     color: var(--primary);
     font-size: 0.875rem;
     text-decoration: none;
-    
+
     &:hover {
       text-decoration: underline;
     }
   }
-  
+
   .company-details {
     display: flex;
     flex-wrap: wrap;
@@ -421,27 +426,27 @@
     padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--medium-gray);
   }
-  
+
   .company-detail {
     .detail-label {
       font-size: 0.75rem;
       color: var(--dark-gray);
       margin-bottom: 0.25rem;
     }
-    
+
     .detail-value {
       font-size: 1rem;
       font-weight: 500;
     }
   }
-  
+
   .company-description {
     h3 {
       font-size: 1.125rem;
       font-weight: 600;
       margin-bottom: 1rem;
     }
-    
+
     p {
       line-height: 1.6;
       white-space: pre-line;
@@ -456,24 +461,24 @@
     align-items: center;
     gap: 2rem;
     margin-bottom: 2rem;
-    
+
     @media (max-width: 768px) {
       flex-direction: column;
       align-items: flex-start;
       gap: 1rem;
     }
   }
-  
+
   .match-score {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+
     @media (max-width: 768px) {
       align-items: flex-start;
     }
   }
-  
+
   .big-match-ring {
     width: 100px;
     height: 100px;
@@ -481,13 +486,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: conic-gradient(var(--primary) 0deg, var(--primary) calc(var(--percentage) * 3.6deg), var(--light-gray) calc(var(--percentage) * 3.6deg), var(--light-gray) 360deg);
+    background: conic-gradient(
+      var(--primary) 0deg,
+      var(--primary) calc(var(--percentage) * 3.6deg),
+      var(--light-gray) calc(var(--percentage) * 3.6deg),
+      var(--light-gray) 360deg
+    );
     --percentage: 75;
     position: relative;
     margin-bottom: 0.75rem;
-    
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       width: 80px;
       height: 80px;
@@ -495,7 +505,7 @@
       background-color: var(--white);
     }
   }
-  
+
   .big-match-percentage {
     position: relative;
     z-index: 1;
@@ -503,21 +513,21 @@
     font-weight: 700;
     color: var(--primary);
   }
-  
+
   h3 {
     font-size: 1.125rem;
     font-weight: 600;
     color: var(--primary);
   }
-  
+
   .match-description {
     flex: 1;
     line-height: 1.6;
   }
-  
+
   .skill-matches {
     margin-bottom: 2rem;
-    
+
     h3 {
       font-size: 1.125rem;
       font-weight: 600;
@@ -525,31 +535,31 @@
       color: var(--black);
     }
   }
-  
+
   .skill-match-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .skill-match-item {
     .skill-match-info {
       display: flex;
       justify-content: space-between;
       margin-bottom: 0.5rem;
     }
-    
+
     .skill-name {
       font-size: 0.875rem;
       font-weight: 500;
     }
-    
+
     .skill-percentage {
       font-size: 0.875rem;
       font-weight: 600;
       color: var(--primary);
     }
-    
+
     .skill-progress-bar {
       width: 100%;
       height: 8px;
@@ -557,14 +567,14 @@
       border-radius: 9999px;
       overflow: hidden;
     }
-    
+
     .skill-progress-fill {
       height: 100%;
       background-color: var(--primary);
       border-radius: 9999px;
     }
   }
-  
+
   .match-tips {
     h3 {
       font-size: 1.125rem;
@@ -572,15 +582,15 @@
       margin-bottom: 1rem;
       color: var(--black);
     }
-    
+
     .tips-list {
       list-style-type: disc;
       padding-left: 1.5rem;
-      
+
       li {
         margin-bottom: 0.75rem;
         line-height: 1.5;
-        
+
         &:last-child {
           margin-bottom: 0;
         }
@@ -599,47 +609,47 @@
 .application-form {
   .form-group {
     margin-bottom: 1.5rem;
-    
+
     &:last-child {
       margin-bottom: 0;
     }
   }
-  
+
   .form-label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
   }
-  
+
   .form-control {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--medium-gray);
     border-radius: 0.5rem;
     font-size: 1rem;
-    
+
     &:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(67, 24, 209, 0.1);
     }
   }
-  
+
   .form-text {
     font-size: 0.75rem;
     color: var(--dark-gray);
     margin-top: 0.5rem;
   }
-  
+
   .resume-uploader {
     display: flex;
     gap: 1rem;
-    
+
     @media (max-width: 576px) {
       flex-direction: column;
     }
   }
-  
+
   .resume-preview {
     flex: 1;
     display: flex;
@@ -648,30 +658,30 @@
     padding: 0.75rem 1rem;
     border: 1px solid var(--medium-gray);
     border-radius: 0.5rem;
-    
+
     svg {
       color: var(--primary);
     }
   }
-  
+
   .btn-outline {
     background-color: var(--white);
     border: 1px solid var(--medium-gray);
     color: var(--dark-gray);
-    
+
     &:hover {
       border-color: var(--primary);
       color: var(--primary);
     }
   }
-  
+
   .btn-loading {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
   }
-  
+
   .spinner {
     width: 1rem;
     height: 1rem;
@@ -686,36 +696,36 @@
 .application-success {
   text-align: center;
   padding: 3rem 2rem;
-  
+
   .success-icon {
     color: var(--success);
     margin-bottom: 1.5rem;
-    
+
     svg {
       width: 64px;
       height: 64px;
     }
   }
-  
+
   h2 {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
     color: var(--success);
   }
-  
+
   p {
     font-size: 1rem;
     line-height: 1.6;
     max-width: 600px;
     margin: 0 auto 2rem;
   }
-  
+
   .success-actions {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    
+
     @media (max-width: 576px) {
       flex-direction: column;
       align-items: center;
@@ -726,28 +736,28 @@
 // Job Sidebar
 .job-sidebar {
   align-self: start;
-  
+
   @media (max-width: 992px) {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   @media (min-width: 576px) and (max-width: 992px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   > div {
     background-color: var(--white);
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    
+
     @media (max-width: 992px) {
       margin-bottom: 0;
     }
-    
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -775,7 +785,7 @@
   border: 1px solid var(--medium-gray);
   border-radius: 0.75rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  
+
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -792,7 +802,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   img {
     max-width: 80%;
     max-height: 80%;
@@ -847,7 +857,7 @@
   color: var(--primary);
   font-size: 0.875rem;
   text-decoration: none;
-  
+
   &:hover {
     text-decoration: underline;
   }
@@ -872,45 +882,45 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   svg {
     width: 18px;
     height: 18px;
   }
-  
+
   &.linkedin {
-    background-color: #0077B5;
+    background-color: #0077b5;
     color: white;
-    
+
     &:hover {
-      background-color: darken(#0077B5, 10%);
+      background-color: darken(#0077b5, 10%);
     }
   }
-  
+
   &.twitter {
-    background-color: #1DA1F2;
+    background-color: #1da1f2;
     color: white;
-    
+
     &:hover {
-      background-color: darken(#1DA1F2, 10%);
+      background-color: darken(#1da1f2, 10%);
     }
   }
-  
+
   &.email {
-    background-color: #D44638;
+    background-color: #d44638;
     color: white;
-    
+
     &:hover {
-      background-color: darken(#D44638, 10%);
+      background-color: darken(#d44638, 10%);
     }
   }
-  
+
   &.copy {
     background-color: var(--light-gray);
     color: var(--dark-gray);
-    
+
     &:hover {
-      background-color: darken(#F9FAFB, 5%);
+      background-color: darken(#f9fafb, 5%);
     }
   }
 }
@@ -930,11 +940,11 @@
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     color: var(--danger);
     border-color: var(--danger);
-    
+
     svg {
       color: var(--danger);
     }

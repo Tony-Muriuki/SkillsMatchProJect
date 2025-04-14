@@ -20,12 +20,6 @@
           >
         </div>
       </div>
-      <div class="hero-image">
-        <img
-          src="src/app/assets/images/jakub-zerdzicki-evqxKaGDpfs-unsplash.jpg"
-          alt="SkillMatch AI Platform"
-        />
-      </div>
     </div>
   </div>
 </section>
@@ -46,12 +40,6 @@
         *ngFor="let card of featureCards; let i = index"
       >
         <div class="feature-card-header">
-          <div class="feature-icon">
-            <img
-              [src]="'assets/icons/' + card.icon + '.svg'"
-              [alt]="card.title"
-            />
-          </div>
           <div class="feature-icon-number">{{ i + 1 }}</div>
         </div>
         <div class="feature-content">
@@ -74,21 +62,8 @@
     </div>
 
     <div class="benefits-container">
-      <div class="benefits-image">
-        <img
-          src="assets/images/job-seeker-benefits.png"
-          alt="Job Seeker Benefits"
-        />
-      </div>
-
       <div class="benefit-cards">
         <div class="benefit-card" *ngFor="let card of benefitCards">
-          <div class="benefit-icon">
-            <img
-              [src]="'assets/icons/' + card.icon + '.svg'"
-              [alt]="card.title"
-            />
-          </div>
           <div class="benefit-content">
             <h3 class="benefit-title">{{ card.title }}</h3>
             <p class="benefit-description">{{ card.description }}</p>

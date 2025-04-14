@@ -1,1 +1,291 @@
-<p>recruiter-dashboard works!</p>
+<div class="dashboard">
+  <div class="container">
+    <!-- Welcome section -->
+    <div class="welcome-section">
+      <div class="welcome-content">
+        <h1 class="welcome-title">Welcome back, {{ userName }}!</h1>
+        <p class="welcome-subtitle">{{ companyName }} • Recruiter Dashboard</p>
+
+        <div class="welcome-actions">
+          <button class="btn btn-primary">Post New Job</button>
+          <button class="btn btn-secondary">Search Candidates</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats section -->
+    <div class="stats-section">
+      <div class="stat-card">
+        <div class="stat-icon job-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ activeJobsCount }}</h3>
+          <p class="stat-label">Active Jobs</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon candidate-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ candidatesCount }}</h3>
+          <p class="stat-label">Candidates</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon interview-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 2H3v16h5v4l4-4h9V2z"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ interviewsCount }}</h3>
+          <p class="stat-label">Interviews</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon match-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ averageMatchScore }}%</h3>
+          <p class="stat-label">Avg Match Score</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main dashboard content -->
+    <div class="dashboard-content">
+      <div class="dashboard-main">
+        <div class="dashboard-card hiring-pipeline">
+          <div class="card-header">
+            <h2 class="card-title">Hiring Pipeline</h2>
+            <a routerLink="/candidates" class="view-all-link">View All</a>
+          </div>
+
+          <div class="candidate-list">
+            <div class="candidate-card" *ngFor="let candidate of candidates">
+              <div class="candidate-avatar">
+                <img [src]="candidate.avatar" [alt]="candidate.name" />
+              </div>
+              <div class="candidate-info">
+                <h3 class="candidate-name">{{ candidate.name }}</h3>
+                <p class="candidate-position">{{ candidate.position }}</p>
+                <div class="candidate-meta">
+                  <div class="candidate-match">
+                    <span class="match-badge"
+                      >{{ candidate.matchPercentage }}% Match</span
+                    >
+                  </div>
+                  <div class="candidate-status">
+                    <span
+                      [class]="
+                        'status-badge ' + getStatusClass(candidate.status)
+                      "
+                    >
+                      {{ getStatusText(candidate.status) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="candidate-actions">
+                <button class="btn btn-outline btn-sm">View</button>
+                <button class="btn btn-primary btn-sm">Contact</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-card active-jobs">
+          <div class="card-header">
+            <h2 class="card-title">Active Job Listings</h2>
+            <a routerLink="/jobs/manage" class="view-all-link">View All</a>
+          </div>
+
+          <div class="job-list">
+            <div class="job-card" *ngFor="let job of activeJobs">
+              <div class="job-info">
+                <h3 class="job-title">{{ job.title }}</h3>
+                <div class="job-meta">
+                  <span class="job-location">{{ job.location }}</span>
+                  <span class="job-type">{{ job.type }}</span>
+                </div>
+                <p class="job-date">
+                  Posted on {{ job.postedDate | date : "mediumDate" }}
+                </p>
+              </div>
+              <div class="job-stats">
+                <div class="job-stat">
+                  <span class="stat-value">{{ job.applicantsCount }}</span>
+                  <span class="stat-label">Applicants</span>
+                </div>
+                <div class="job-stat">
+                  <span class="stat-value">{{ job.matchedCount }}</span>
+                  <span class="stat-label">Matched</span>
+                </div>
+                <div class="job-status">
+                  <span [class]="'status-badge ' + getStatusClass(job.status)">
+                    {{ getStatusText(job.status) }}
+                  </span>
+                </div>
+              </div>
+              <div class="job-actions">
+                <button class="btn btn-outline btn-sm">Edit</button>
+                <button class="btn btn-primary btn-sm">View Applicants</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-sidebar">
+        <div class="dashboard-card interview-schedule">
+          <div class="card-header">
+            <h2 class="card-title">Interview Schedule</h2>
+            <a routerLink="/interviews" class="view-all-link">View All</a>
+          </div>
+
+          <div class="interview-list">
+            <div
+              class="interview-card"
+              *ngFor="let interview of upcomingInterviews"
+            >
+              <div class="interview-date">
+                <div class="date-day">{{ interview.date | date : "d" }}</div>
+                <div class="date-month">
+                  {{ interview.date | date : "MMM" }}
+                </div>
+              </div>
+              <div class="interview-details">
+                <div class="interview-candidate">
+                  <img
+                    [src]="interview.candidateAvatar"
+                    [alt]="interview.candidateName"
+                    class="candidate-img"
+                  />
+                  <div class="candidate-details">
+                    <h3 class="candidate-name">
+                      {{ interview.candidateName }}
+                    </h3>
+                    <p class="interview-position">{{ interview.position }}</p>
+                  </div>
+                </div>
+                <div class="interview-time">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  {{ interview.time }}
+                </div>
+                <div class="interview-status">
+                  <span
+                    [class]="'status-badge ' + getStatusClass(interview.status)"
+                  >
+                    {{ getStatusText(interview.status) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-card recent-messages">
+          <div class="card-header">
+            <h2 class="card-title">Recent Messages</h2>
+            <a routerLink="/chat" class="view-all-link">View All</a>
+          </div>
+
+          <div class="message-list">
+            <div
+              class="message-card"
+              *ngFor="let message of recentMessages"
+              [class.unread]="message.isUnread"
+            >
+              <div class="message-sender">
+                <img
+                  [src]="message.senderAvatar"
+                  [alt]="message.sender"
+                  class="sender-img"
+                />
+                <div class="sender-details">
+                  <h3 class="sender-name">{{ message.sender }}</h3>
+                  <p class="message-time">{{ message.time }}</p>
+                </div>
+              </div>
+              <p class="message-content">{{ message.content }}</p>
+              <div class="message-actions">
+                <button class="btn btn-outline btn-sm">View</button>
+                <button class="btn btn-primary btn-sm">Reply</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

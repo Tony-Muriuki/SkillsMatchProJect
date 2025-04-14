@@ -1,1 +1,225 @@
-<p>admin-dashboard works!</p>
+<div class="admin-dashboard">
+  <div class="container">
+    <!-- Header section -->
+    <div class="admin-header">
+      <h1 class="admin-title">Admin Dashboard</h1>
+      <div class="admin-tools">
+        <button class="btn btn-outline">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Export Data
+        </button>
+        <button class="btn btn-outline">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          Search
+        </button>
+        <button class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+          New Report
+        </button>
+      </div>
+    </div>
+    
+    <!-- Stats section -->
+    <div class="stats-section">
+      <div class="stat-card">
+        <div class="stat-icon users-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{totalUsers.toLocaleString()}}</h3>
+          <p class="stat-label">Total Users</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon jobs-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{activeJobs.toLocaleString()}}</h3>
+          <p class="stat-label">Active Jobs</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon match-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{matchAccuracy}}%</h3>
+          <p class="stat-label">Match Accuracy</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon revenue-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{formatCurrency(totalRevenue)}}</h3>
+          <p class="stat-label">Total Revenue</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Charts section -->
+    <div class="charts-section">
+      <div class="chart-card">
+        <div class="card-header">
+          <h2 class="card-title">User Growth</h2>
+          <div class="card-actions">
+            <button class="btn btn-sm btn-outline">Monthly</button>
+            <button class="btn btn-sm btn-outline active">Yearly</button>
+          </div>
+        </div>
+        
+        <div class="chart-container">
+          <!-- User growth chart would be rendered here -->
+          <div class="chart-placeholder">
+            <div class="chart-mock-area">
+              <div class="chart-y-axis">
+                <div class="chart-y-label">2000</div>
+                <div class="chart-y-label">1500</div>
+                <div class="chart-y-label">1000</div>
+                <div class="chart-y-label">500</div>
+                <div class="chart-y-label">0</div>
+              </div>
+              <div class="chart-content">
+                <div class="chart-bars">
+                  <div class="chart-bar-group" *ngFor="let data of monthlyUsersData">
+                    <div class="chart-bar job-seekers" [style.height.%]="data.jobSeekers / 20"></div>
+                    <div class="chart-bar recruiters" [style.height.%]="data.recruiters / 5"></div>
+                  </div>
+                </div>
+                <div class="chart-x-axis">
+                  <div class="chart-x-label" *ngFor="let data of monthlyUsersData">{{data.month}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <div class="legend-color job-seekers"></div>
+                <div class="legend-label">Job Seekers</div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color recruiters"></div>
+                <div class="legend-label">Recruiters</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chart-card">
+        <div class="card-header">
+          <h2 class="card-title">Job Categories</h2>
+          <div class="card-actions">
+            <button class="btn btn-sm btn-outline">Export</button>
+          </div>
+        </div>
+        
+        <div class="chart-container">
+          <!-- Job categories chart would be rendered here -->
+          <div class="categories-list">
+            <div class="category-item" *ngFor="let category of jobCategoriesData">
+              <div class="category-info">
+                <div class="category-name">{{category.category}}</div>
+                <div class="category-count">{{category.count}} jobs</div>
+              </div>
+              <div class="category-bar-container">
+                <div class="category-bar" [style.width.%]="(category.count / 432) * 100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Bottom section -->
+    <div class="admin-bottom-section">
+      <div class="alerts-card">
+        <div class="card-header">
+          <h2 class="card-title">System Alerts</h2>
+          <div class="card-actions">
+            <button class="btn btn-sm btn-outline">View All</button>
+          </div>
+        </div>
+        
+        <div class="alerts-list">
+          <div class="alert-item" *ngFor="let alert of systemAlerts" [class]="getAlertClass(alert.type)">
+            <div class="alert-icon">
+              <svg *ngIf="alert.type === 'warning'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <svg *ngIf="alert.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <svg *ngIf="alert.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <svg *ngIf="alert.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
+            </div>
+            <div class="alert-content">
+              <h3 class="alert-title">{{alert.title}}</h3>
+              <p class="alert-description">{{alert.description}}</p>
+              <span class="alert-time">{{alert.time}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="activity-card">
+        <div class="card-header">
+          <h2 class="card-title">Recent Activities</h2>
+          <div class="card-actions">
+            <button class="btn btn-sm btn-outline">View All</button>
+          </div>
+        </div>
+        
+        <div class="activity-list">
+          <div class="activity-item" *ngFor="let activity of recentActivities">
+            <div class="activity-content">
+              <span class="activity-user">{{activity.user}}</span>
+              <span class="activity-action">{{activity.action}}</span>
+              <span class="activity-target" *ngIf="activity.target">{{activity.target}}</span>
+              <span class="activity-time">{{activity.time}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

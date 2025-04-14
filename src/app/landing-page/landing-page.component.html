@@ -1,1 +1,126 @@
-<p>landing-page works!</p>
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Find Your Perfect Career Match with
+          <span class="text-primary">AI-Powered</span> Skill Matching
+        </h1>
+        <p class="hero-description">
+          SkillMatch AI helps job seekers and recruiters connect based on
+          skills, not just job titles. Our platform uses advanced algorithms to
+          match your abilities with the right opportunities.
+        </p>
+        <div class="hero-buttons">
+          <a routerLink="/auth/role-selection" class="btn btn-primary"
+            >Get Started</a
+          >
+          <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="assets/hero-image.png" alt="SkillMatch AI Platform" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features-section" id="how-it-works">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-description">
+        Our AI-powered platform makes it easy to connect talent with
+        opportunities
+      </p>
+    </div>
+
+    <div class="feature-cards">
+      <div
+        class="feature-card"
+        *ngFor="let card of featureCards; let i = index"
+      >
+        <div class="feature-icon">
+          <div class="feature-icon-number">{{ i + 1 }}</div>
+          <img
+            [src]="'assets/icons/' + card.icon + '.svg'"
+            [alt]="card.title"
+          />
+        </div>
+        <h3 class="feature-title">{{ card.title }}</h3>
+        <p class="feature-description">{{ card.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="benefits-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2 class="section-title">Benefits for Job Seekers</h2>
+      <p class="section-description">
+        SkillMatch AI offers powerful tools to help you find your next
+        opportunity
+      </p>
+    </div>
+
+    <div class="benefits-container">
+      <div class="benefits-image">
+        <img src="assets/job-seeker-benefits.png" alt="Job Seeker Benefits" />
+      </div>
+
+      <div class="benefit-cards">
+        <div class="benefit-card" *ngFor="let card of benefitCards">
+          <div class="benefit-icon">
+            <img
+              [src]="'assets/icons/' + card.icon + '.svg'"
+              [alt]="card.title"
+            />
+          </div>
+          <div class="benefit-content">
+            <h3 class="benefit-title">{{ card.title }}</h3>
+            <p class="benefit-description">{{ card.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Ready to Find Your Perfect Career Match?</h2>
+      <p class="cta-description">
+        Join thousands of job seekers and recruiters using SkillMatch AI to
+        revolutionize the hiring process.
+      </p>
+      <a routerLink="/auth/role-selection" class="btn btn-primary btn-large"
+        >Sign Up Now</a
+      >
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-cards">
+      <div class="stats-card">
+        <h3 class="stats-number">10,000+</h3>
+        <p class="stats-label">Job Seekers</p>
+      </div>
+      <div class="stats-card">
+        <h3 class="stats-number">500+</h3>
+        <p class="stats-label">Companies</p>
+      </div>
+      <div class="stats-card">
+        <h3 class="stats-number">95%</h3>
+        <p class="stats-label">Match Accuracy</p>
+      </div>
+      <div class="stats-card">
+        <h3 class="stats-number">2,500+</h3>
+        <p class="stats-label">Successful Placements</p>
+      </div>
+    </div>
+  </div>
+</section>

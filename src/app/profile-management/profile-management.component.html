@@ -1,1 +1,877 @@
-<p>profile-management works!</p>
+<div class="profile-page">
+  <div class="container">
+    <!-- Loading state -->
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="loader"></div>
+      <p>Loading profile data...</p>
+    </div>
+
+    <div class="profile-content" *ngIf="!isLoading">
+      <div class="profile-header">
+        <h1 class="page-title">Profile Management</h1>
+        <p class="page-subtitle">
+          Complete your profile to increase your chances of finding the perfect
+          job
+        </p>
+      </div>
+
+      <div class="profile-progress">
+        <div class="progress-text">
+          <span>Profile Completeness: {{ getProfileCompleteness() }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            [style.width.%]="getProfileCompleteness()"
+          ></div>
+        </div>
+      </div>
+
+      <div class="profile-wrapper">
+        <div class="profile-sidebar">
+          <div class="profile-navigation">
+            <button
+              class="nav-button"
+              [class.active]="activeSection === 'basic'"
+              (click)="setActiveSection('basic')"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Basic Information
+            </button>
+
+            <button
+              class="nav-button"
+              [class.active]="activeSection === 'skills'"
+              (click)="setActiveSection('skills')"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                ></path>
+              </svg>
+              Skills
+            </button>
+
+            <button
+              class="nav-button"
+              [class.active]="activeSection === 'education'"
+              (click)="setActiveSection('education')"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+              Education
+            </button>
+
+            <button
+              class="nav-button"
+              [class.active]="activeSection === 'experience'"
+              (click)="setActiveSection('experience')"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              Experience
+            </button>
+
+            <button
+              class="nav-button"
+              [class.active]="activeSection === 'projects'"
+              (click)="setActiveSection('projects')"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polygon
+                  points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"
+                ></polygon>
+                <line x1="12" y1="22" x2="12" y2="15.5"></line>
+                <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+              </svg>
+              Projects
+            </button>
+          </div>
+
+          <div class="profile-actions">
+            <button class="btn btn-primary btn-block" (click)="saveProfile()">
+              Save Profile
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-main">
+          <!-- Basic Information Section -->
+          <div class="profile-section" *ngIf="activeSection === 'basic'">
+            <div class="section-header">
+              <h2 class="section-title">Basic Information</h2>
+              <p class="section-subtitle">Tell us about yourself</p>
+            </div>
+
+            <form [formGroup]="userForm" class="profile-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName" class="form-label">First Name *</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    formControlName="firstName"
+                    class="form-control"
+                    [class.is-invalid]="
+                      userForm.get('firstName')?.invalid &&
+                      userForm.get('firstName')?.touched
+                    "
+                  />
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      userForm.get('firstName')?.invalid &&
+                      userForm.get('firstName')?.touched
+                    "
+                  >
+                    First name is required
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="lastName" class="form-label">Last Name *</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    formControlName="lastName"
+                    class="form-control"
+                    [class.is-invalid]="
+                      userForm.get('lastName')?.invalid &&
+                      userForm.get('lastName')?.touched
+                    "
+                  />
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      userForm.get('lastName')?.invalid &&
+                      userForm.get('lastName')?.touched
+                    "
+                  >
+                    Last name is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="jobTitle" class="form-label">Job Title *</label>
+                <input
+                  type="text"
+                  id="jobTitle"
+                  formControlName="jobTitle"
+                  class="form-control"
+                  [class.is-invalid]="
+                    userForm.get('jobTitle')?.invalid &&
+                    userForm.get('jobTitle')?.touched
+                  "
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    userForm.get('jobTitle')?.invalid &&
+                    userForm.get('jobTitle')?.touched
+                  "
+                >
+                  Job title is required
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email" class="form-label">Email *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    formControlName="email"
+                    class="form-control"
+                    [class.is-invalid]="
+                      userForm.get('email')?.invalid &&
+                      userForm.get('email')?.touched
+                    "
+                  />
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      userForm.get('email')?.invalid &&
+                      userForm.get('email')?.touched
+                    "
+                  >
+                    <span *ngIf="userForm.get('email')?.errors?.['required']"
+                      >Email is required</span
+                    >
+                    <span *ngIf="userForm.get('email')?.errors?.['email']"
+                      >Please enter a valid email</span
+                    >
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="phone" class="form-label">Phone</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    formControlName="phone"
+                    class="form-control"
+                    [class.is-invalid]="
+                      userForm.get('phone')?.invalid &&
+                      userForm.get('phone')?.touched
+                    "
+                  />
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      userForm.get('phone')?.invalid &&
+                      userForm.get('phone')?.touched
+                    "
+                  >
+                    Please enter a valid phone number
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="location" class="form-label">Location</label>
+                <input
+                  type="text"
+                  id="location"
+                  formControlName="location"
+                  class="form-control"
+                  placeholder="City, State, Country"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="about" class="form-label">About</label>
+                <textarea
+                  id="about"
+                  formControlName="about"
+                  class="form-control"
+                  rows="4"
+                  [class.is-invalid]="
+                    userForm.get('about')?.invalid &&
+                    userForm.get('about')?.touched
+                  "
+                  placeholder="Tell us about yourself, your skills, and your career goals"
+                ></textarea>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    userForm.get('about')?.invalid &&
+                    userForm.get('about')?.touched
+                  "
+                >
+                  Bio cannot exceed 500 characters
+                </div>
+                <div class="form-text" *ngIf="userForm.get('about')?.value">
+                  {{ userForm.get("about")?.value.length }} / 500 characters
+                </div>
+              </div>
+
+              <div class="form-section-divider">
+                <h3 class="divider-title">Online Presence</h3>
+              </div>
+
+              <div class="form-group">
+                <label for="linkedin" class="form-label"
+                  >LinkedIn Profile</label
+                >
+                <input
+                  type="text"
+                  id="linkedin"
+                  formControlName="linkedin"
+                  class="form-control"
+                  placeholder="https://linkedin.com/in/username"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="github" class="form-label">GitHub Profile</label>
+                <input
+                  type="text"
+                  id="github"
+                  formControlName="github"
+                  class="form-control"
+                  placeholder="https://github.com/username"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="portfolio" class="form-label"
+                  >Portfolio Website</label
+                >
+                <input
+                  type="text"
+                  id="portfolio"
+                  formControlName="portfolio"
+                  class="form-control"
+                  placeholder="https://yourportfolio.com"
+                />
+              </div>
+            </form>
+          </div>
+
+          <!-- Skills Section -->
+          <div class="profile-section" *ngIf="activeSection === 'skills'">
+            <div class="section-header">
+              <h2 class="section-title">Skills</h2>
+              <p class="section-subtitle">
+                Add the skills that showcase your expertise
+              </p>
+            </div>
+
+            <form [formGroup]="skillsForm" class="profile-form">
+              <div class="skill-add-container">
+                <div class="skill-input-wrapper">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Add a skill..."
+                    [(ngModel)]="newSkill"
+                    [ngModelOptions]="{ standalone: true }"
+                    (input)="filterSkillSuggestions()"
+                    (focus)="onSkillInputFocus()"
+                    (blur)="onSkillInputBlur()"
+                  />
+                  <button
+                    class="btn btn-primary add-skill-btn"
+                    (click)="addSkill()"
+                    [disabled]="!newSkill.trim()"
+                  >
+                    Add
+                  </button>
+                </div>
+
+                <div
+                  class="skill-suggestions"
+                  *ngIf="
+                    showSkillSuggestions && filteredSkillSuggestions.length > 0
+                  "
+                >
+                  <div
+                    class="skill-suggestion-item"
+                    *ngFor="let skill of filteredSkillSuggestions"
+                    (click)="selectSkillSuggestion(skill)"
+                  >
+                    {{ skill }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="skills-list" formArrayName="skills">
+                <div class="empty-state" *ngIf="skillsArray.length === 0">
+                  <p>
+                    You haven't added any skills yet. Use the field above to add
+                    your first skill.
+                  </p>
+                </div>
+
+                <div
+                  class="skill-item"
+                  *ngFor="let skill of skillsArray.controls; let i = index"
+                  [formGroupName]="i"
+                >
+                  <div class="skill-header">
+                    <h3 class="skill-name">{{ skill.value.name }}</h3>
+                    <button
+                      class="remove-btn"
+                      (click)="removeSkill(i)"
+                      title="Remove skill"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="skill-details">
+                    <div class="skill-level">
+                      <label class="form-label">Proficiency Level</label>
+                      <select formControlName="level" class="form-control">
+                        <option
+                          *ngFor="let level of skillLevels"
+                          [value]="level"
+                        >
+                          {{ level }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="skill-years">
+                      <label class="form-label">Years of Experience</label>
+                      <input
+                        type="number"
+                        formControlName="years"
+                        class="form-control"
+                        min="0"
+                        max="50"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Education Section -->
+          <div class="profile-section" *ngIf="activeSection === 'education'">
+            <div class="section-header">
+              <h2 class="section-title">Education</h2>
+              <p class="section-subtitle">Add your educational background</p>
+            </div>
+
+            <form [formGroup]="educationForm" class="profile-form">
+              <div formArrayName="education">
+                <div class="empty-state" *ngIf="educationArray.length === 0">
+                  <p>You haven't added any education yet.</p>
+                </div>
+
+                <div
+                  class="education-item"
+                  *ngFor="
+                    let education of educationArray.controls;
+                    let i = index
+                  "
+                  [formGroupName]="i"
+                >
+                  <div class="item-header">
+                    <h3 class="item-title">
+                      {{ education.value.school || "New Education" }}
+                      <span *ngIf="education.value.degree">
+                        - {{ education.value.degree }}</span
+                      >
+                    </h3>
+                    <button
+                      class="remove-btn"
+                      (click)="removeEducation(i)"
+                      title="Remove education"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">School/University *</label>
+                    <input
+                      type="text"
+                      formControlName="school"
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Degree *</label>
+                      <input
+                        type="text"
+                        formControlName="degree"
+                        class="form-control"
+                        placeholder="e.g. Bachelor of Science"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Field of Study *</label>
+                      <input
+                        type="text"
+                        formControlName="field"
+                        class="form-control"
+                        placeholder="e.g. Computer Science"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Start Date *</label>
+                      <input
+                        type="date"
+                        formControlName="startDate"
+                        class="form-control"
+                      />
+                    </div>
+
+                    <div class="form-group" *ngIf="!education.value.current">
+                      <label class="form-label">End Date</label>
+                      <input
+                        type="date"
+                        formControlName="endDate"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      [id]="'currentEducation' + i"
+                      formControlName="current"
+                      class="form-check-input"
+                      (change)="toggleCurrentEducation(i)"
+                    />
+                    <label
+                      [for]="'currentEducation' + i"
+                      class="form-check-label"
+                    >
+                      I am currently studying here
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-outline add-btn" (click)="addEducation()">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Add Education
+              </button>
+            </form>
+          </div>
+
+          <!-- Experience Section -->
+          <div class="profile-section" *ngIf="activeSection === 'experience'">
+            <div class="section-header">
+              <h2 class="section-title">Experience</h2>
+              <p class="section-subtitle">Add your work experience</p>
+            </div>
+
+            <form [formGroup]="experienceForm" class="profile-form">
+              <div formArrayName="experience">
+                <div class="empty-state" *ngIf="experienceArray.length === 0">
+                  <p>You haven't added any work experience yet.</p>
+                </div>
+
+                <div
+                  class="experience-item"
+                  *ngFor="
+                    let experience of experienceArray.controls;
+                    let i = index
+                  "
+                  [formGroupName]="i"
+                >
+                  <div class="item-header">
+                    <h3 class="item-title">
+                      {{ experience.value.company || "New Experience" }}
+                      <span *ngIf="experience.value.title">
+                        - {{ experience.value.title }}</span
+                      >
+                    </h3>
+                    <button
+                      class="remove-btn"
+                      (click)="removeExperience(i)"
+                      title="Remove experience"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Company *</label>
+                      <input
+                        type="text"
+                        formControlName="company"
+                        class="form-control"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Job Title *</label>
+                      <input
+                        type="text"
+                        formControlName="title"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input
+                      type="text"
+                      formControlName="location"
+                      class="form-control"
+                      placeholder="e.g. San Francisco, CA"
+                    />
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Start Date *</label>
+                      <input
+                        type="date"
+                        formControlName="startDate"
+                        class="form-control"
+                      />
+                    </div>
+
+                    <div class="form-group" *ngIf="!experience.value.current">
+                      <label class="form-label">End Date</label>
+                      <input
+                        type="date"
+                        formControlName="endDate"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      [id]="'currentJob' + i"
+                      formControlName="current"
+                      class="form-check-input"
+                      (change)="toggleCurrentExperience(i)"
+                    />
+                    <label [for]="'currentJob' + i" class="form-check-label">
+                      I currently work here
+                    </label>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea
+                      formControlName="description"
+                      class="form-control"
+                      rows="4"
+                      placeholder="Describe your responsibilities, achievements, and the skills you used"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-outline add-btn" (click)="addExperience()">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Add Experience
+              </button>
+            </form>
+          </div>
+
+          <!-- Projects Section -->
+          <div class="profile-section" *ngIf="activeSection === 'projects'">
+            <div class="section-header">
+              <h2 class="section-title">Projects</h2>
+              <p class="section-subtitle">Showcase your best work</p>
+            </div>
+
+            <form [formGroup]="projectsForm" class="profile-form">
+              <div formArrayName="projects">
+                <div class="empty-state" *ngIf="projectsArray.length === 0">
+                  <p>You haven't added any projects yet.</p>
+                </div>
+
+                <div
+                  class="project-item"
+                  *ngFor="let project of projectsArray.controls; let i = index"
+                  [formGroupName]="i"
+                >
+                  <div class="item-header">
+                    <h3 class="item-title">
+                      {{ project.value.name || "New Project" }}
+                    </h3>
+                    <button
+                      class="remove-btn"
+                      (click)="removeProject(i)"
+                      title="Remove project"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Project Name *</label>
+                    <input
+                      type="text"
+                      formControlName="name"
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea
+                      formControlName="description"
+                      class="form-control"
+                      rows="3"
+                      placeholder="Describe what the project does and your role in it"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Project URL</label>
+                    <input
+                      type="text"
+                      formControlName="url"
+                      class="form-control"
+                      placeholder="https://github.com/username/project"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Technologies Used</label>
+                    <input
+                      type="text"
+                      formControlName="technologies"
+                      class="form-control"
+                      placeholder="e.g. Angular, TypeScript, SCSS, etc."
+                    />
+                    <div class="form-text">
+                      Separate technologies with commas
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-outline add-btn" (click)="addProject()">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Add Project
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,218 @@
-<p>notifications works!</p>
+<div class="notifications-page">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Notifications</h1>
+      <p class="page-subtitle" *ngIf="getUnreadCount() > 0">
+        You have {{ getUnreadCount() }} unread notifications
+      </p>
+      <p class="page-subtitle" *ngIf="getUnreadCount() === 0">
+        You're all caught up!
+      </p>
+    </div>
+
+    <div class="notifications-wrapper">
+      <div class="notifications-sidebar">
+        <div class="filters-header">
+          <h2 class="filters-title">Filters</h2>
+        </div>
+
+        <div class="filter-list">
+          <button
+            class="filter-btn"
+            [class.active]="activeFilter === 'all'"
+            (click)="filterNotifications('all')"
+          >
+            All Notifications
+          </button>
+          <button
+            class="filter-btn"
+            [class.active]="activeFilter === 'unread'"
+            (click)="filterNotifications('unread')"
+          >
+            Unread
+            <span class="unread-badge" *ngIf="getUnreadCount() > 0">{{
+              getUnreadCount()
+            }}</span>
+          </button>
+          <button
+            class="filter-btn"
+            [class.active]="activeFilter === 'job'"
+            (click)="filterNotifications('job')"
+          >
+            Job Matches
+          </button>
+          <button
+            class="filter-btn"
+            [class.active]="activeFilter === 'application'"
+            (click)="filterNotifications('application')"
+          >
+            Applications
+          </button>
+          <button
+            class="filter-btn"
+            [class.active]="activeFilter === 'message'"
+            (click)="filterNotifications('message')"
+          >
+            Messages
+          </button>
+        </div>
+
+        <div class="sidebar-actions">
+          <button class="btn btn-primary btn-block" (click)="markAllAsRead()">
+            Mark All as Read
+          </button>
+          <button
+            class="btn btn-outline btn-block"
+            (click)="clearAllNotifications()"
+          >
+            Clear All
+          </button>
+        </div>
+      </div>
+
+      <div class="notifications-main">
+        <!-- Loading state -->
+        <div class="loading-state" *ngIf="isLoading">
+          <div class="loader"></div>
+          <p>Loading notifications...</p>
+        </div>
+
+        <!-- Empty state -->
+        <div
+          class="empty-state"
+          *ngIf="!isLoading && filteredNotifications.length === 0"
+        >
+          <div class="empty-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+          </div>
+          <h3>No notifications found</h3>
+          <p *ngIf="activeFilter !== 'all'">
+            Try changing your filter to see more notifications
+          </p>
+          <p *ngIf="activeFilter === 'all'">
+            You don't have any notifications yet
+          </p>
+          <button
+            class="btn btn-primary"
+            *ngIf="activeFilter !== 'all'"
+            (click)="filterNotifications('all')"
+          >
+            View All Notifications
+          </button>
+        </div>
+
+        <!-- Notification list -->
+        <div
+          class="notification-list"
+          *ngIf="!isLoading && filteredNotifications.length > 0"
+        >
+          <div
+            class="notification-card"
+            *ngFor="let notification of filteredNotifications"
+            [class.unread]="!notification.isRead"
+            [class]="getNotificationClass(notification.type)"
+          >
+            <div
+              class="notification-icon"
+              [innerHTML]="getNotificationIcon(notification.type)"
+            ></div>
+
+            <div class="notification-content">
+              <div class="notification-header">
+                <h3 class="notification-title">{{ notification.title }}</h3>
+                <div class="notification-actions">
+                  <button
+                    class="action-btn"
+                    (click)="markAsRead(notification)"
+                    *ngIf="!notification.isRead"
+                    title="Mark as read"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    class="action-btn"
+                    (click)="deleteNotification(notification.id)"
+                    title="Delete notification"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path
+                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                      ></path>
+                      <line x1="10" y1="11" x2="10" y2="17"></line>
+                      <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <p class="notification-message">{{ notification.content }}</p>
+
+              <div class="notification-footer">
+                <div class="notification-time">
+                  {{ notification.date | date : "mediumDate" }} at
+                  {{ notification.time }}
+                </div>
+                <a
+                  *ngIf="notification.link"
+                  [routerLink]="notification.link"
+                  class="notification-link"
+                >
+                  {{ notification.actionText }}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

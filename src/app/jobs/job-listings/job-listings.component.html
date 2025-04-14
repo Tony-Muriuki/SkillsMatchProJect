@@ -1,1 +1,371 @@
-<p>job-listings works!</p>
+<div class="job-listings-page">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Find Your Perfect Job</h1>
+      <p class="page-subtitle">
+        Browse job opportunities matched to your skills and experience
+      </p>
+    </div>
+
+    <div class="search-bar">
+      <div class="search-form">
+        <div class="search-input-group">
+          <div class="search-field">
+            <label for="jobSearch" class="search-label">What</label>
+            <input
+              type="text"
+              id="jobSearch"
+              class="search-input"
+              placeholder="Job title, skills, or company"
+              [(ngModel)]="filters.search"
+            />
+          </div>
+          <div class="search-field">
+            <label for="locationSearch" class="search-label">Where</label>
+            <input
+              type="text"
+              id="locationSearch"
+              class="search-input"
+              placeholder="City, state, or remote"
+              [(ngModel)]="filters.location"
+            />
+          </div>
+        </div>
+        <button class="btn btn-primary search-btn" (click)="applyFilters()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          Search
+        </button>
+      </div>
+    </div>
+
+    <div class="job-content">
+      <div class="filters-sidebar">
+        <div class="filters-header">
+          <h2 class="filters-title">Filters</h2>
+          <button class="filters-reset" (click)="resetFilters()">
+            Reset All
+          </button>
+        </div>
+
+        <div class="filter-group">
+          <h3 class="filter-title">Job Type</h3>
+          <div class="filter-options">
+            <div class="filter-option" *ngFor="let type of jobTypes">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  [checked]="isFilterSelected('jobType', type)"
+                  (change)="toggleFilter('jobType', type)"
+                />
+                <span class="checkbox-text">{{ type }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h3 class="filter-title">Category</h3>
+          <div class="filter-options">
+            <div class="filter-option" *ngFor="let category of categories">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  [checked]="isFilterSelected('category', category)"
+                  (change)="toggleFilter('category', category)"
+                />
+                <span class="checkbox-text">{{ category }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h3 class="filter-title">Experience Level</h3>
+          <div class="filter-options">
+            <div class="filter-option" *ngFor="let level of experienceLevels">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  [checked]="isFilterSelected('experience', level)"
+                  (change)="toggleFilter('experience', level)"
+                />
+                <span class="checkbox-text">{{ level }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h3 class="filter-title">Salary Range</h3>
+          <div class="filter-options">
+            <div class="filter-option" *ngFor="let range of salaryRanges">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  [checked]="isFilterSelected('salary', range)"
+                  (change)="toggleFilter('salary', range)"
+                />
+                <span class="checkbox-text">{{ range }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="job-results">
+        <div class="results-header">
+          <h2 class="results-title">
+            <span *ngIf="filteredJobs.length > 0"
+              >{{ filteredJobs.length }} Jobs Found</span
+            >
+            <span *ngIf="filteredJobs.length === 0">No Jobs Found</span>
+          </h2>
+          <div class="results-sort">
+            <label for="sortOptions">Sort by:</label>
+            <select id="sortOptions" class="sort-select">
+              <option value="relevance">Relevance</option>
+              <option value="match">Match %</option>
+              <option value="date">Date Posted</option>
+              <option value="salary">Salary</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Loading state -->
+        <div class="loading-state" *ngIf="isLoading">
+          <div class="loader"></div>
+          <p>Loading jobs...</p>
+        </div>
+
+        <!-- No results state -->
+        <div class="no-results" *ngIf="!isLoading && filteredJobs.length === 0">
+          <div class="no-results-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h3>No jobs found</h3>
+          <p>
+            Try adjusting your search filters or try a different search term
+          </p>
+          <button class="btn btn-primary" (click)="resetFilters()">
+            Clear Filters
+          </button>
+        </div>
+
+        <!-- Job listings -->
+        <div class="job-list" *ngIf="!isLoading && filteredJobs.length > 0">
+          <div class="job-card" *ngFor="let job of getCurrentPageItems()">
+            <div class="job-card-header">
+              <div class="job-logo">
+                <img [src]="job.logo" [alt]="job.company + ' logo'" />
+              </div>
+              <div class="job-match">
+                <div class="match-ring">
+                  <div class="match-percentage">{{ job.matchPercentage }}%</div>
+                </div>
+                <div class="match-label">Match</div>
+              </div>
+            </div>
+
+            <div class="job-card-content">
+              <h3 class="job-title">{{ job.title }}</h3>
+              <p class="job-company">{{ job.company }}</p>
+
+              <div class="job-details">
+                <div class="job-detail">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                    ></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span>{{ job.location }}</span>
+                </div>
+                <div class="job-detail">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect
+                      x="2"
+                      y="7"
+                      width="20"
+                      height="14"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                  </svg>
+                  <span>{{ job.type }}</span>
+                </div>
+                <div class="job-detail">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span>{{ job.postedDate }}</span>
+                </div>
+              </div>
+
+              <div class="job-category-experience">
+                <span class="job-badge job-category">{{ job.category }}</span>
+                <span class="job-badge job-experience">{{
+                  job.experience
+                }}</span>
+              </div>
+
+              <p class="job-salary">{{ job.salary }}</p>
+
+              <div class="job-requirements">
+                <h4 class="requirements-title">Requirements:</h4>
+                <ul class="requirements-list">
+                  <li *ngFor="let req of job.requirements">{{ req }}</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="job-card-footer">
+              <button
+                class="btn btn-save"
+                [class.saved]="job.isSaved"
+                (click)="toggleSaved(job)"
+                [attr.aria-label]="
+                  job.isSaved ? 'Remove from saved jobs' : 'Save job'
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+                  ></path>
+                </svg>
+                <span>{{ job.isSaved ? "Saved" : "Save" }}</span>
+              </button>
+              <a [routerLink]="['/jobs', job.id]" class="btn btn-primary"
+                >View Job</a
+              >
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination" *ngIf="totalPages > 1">
+            <button
+              class="pagination-btn prev"
+              [disabled]="currentPage === 1"
+              (click)="changePage(currentPage - 1)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              Prev
+            </button>
+
+            <div class="pagination-numbers">
+              <button
+                *ngFor="let page of getPageNumbers()"
+                class="pagination-number"
+                [class.active]="page === currentPage"
+                (click)="changePage(page)"
+              >
+                {{ page }}
+              </button>
+            </div>
+
+            <button
+              class="pagination-btn next"
+              [disabled]="currentPage === totalPages"
+              (click)="changePage(currentPage + 1)"
+            >
+              Next
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

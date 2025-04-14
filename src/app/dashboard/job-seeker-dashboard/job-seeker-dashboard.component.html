@@ -1,1 +1,335 @@
-<p>job-seeker-dashboard works!</p>
+<div class="dashboard">
+  <div class="container">
+    <!-- Welcome section -->
+    <div class="welcome-section">
+      <div class="welcome-content">
+        <h1 class="welcome-title">Welcome back, {{ userName }}!</h1>
+        <p class="welcome-subtitle">
+          {{ jobTitle }} with {{ experience }} of experience
+        </p>
+
+        <div class="skills-container">
+          <div class="skill-pill" *ngFor="let skill of skills">
+            {{ skill.name }}
+            <span class="skill-level">{{ skill.level }}</span>
+          </div>
+        </div>
+
+        <div class="welcome-actions">
+          <a routerLink="/profile" class="btn btn-secondary">Update Profile</a>
+          <button class="btn btn-primary">Upload CV</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats section -->
+    <div class="stats-section">
+      <div class="stat-card">
+        <div class="stat-icon match-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ matchedJobsCount }}</h3>
+          <p class="stat-label">Matched Jobs</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon save-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ savedJobsCount }}</h3>
+          <p class="stat-label">Saved Jobs</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon application-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+            ></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ applicationsCount }}</h3>
+          <p class="stat-label">Applications</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon interview-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 2H3v16h5v4l4-4h9V2z"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ interviewsCount }}</h3>
+          <p class="stat-label">Interviews</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main dashboard content -->
+    <div class="dashboard-content">
+      <div class="dashboard-main">
+        <div class="dashboard-card recommended-jobs">
+          <div class="card-header">
+            <h2 class="card-title">AI-Recommended Jobs</h2>
+            <a routerLink="/jobs" class="view-all-link">View All</a>
+          </div>
+
+          <div class="job-list">
+            <div class="job-card" *ngFor="let job of recommendedJobs">
+              <div class="job-header">
+                <div class="job-logo">
+                  <img [src]="job.logo" [alt]="job.company + ' logo'" />
+                </div>
+                <div class="job-match">
+                  <div class="match-percentage">{{ job.matchPercentage }}%</div>
+                  <div class="match-label">Match</div>
+                </div>
+              </div>
+
+              <div class="job-content">
+                <h3 class="job-title">{{ job.title }}</h3>
+                <p class="job-company">{{ job.company }}</p>
+                <div class="job-details">
+                  <div class="job-location">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                      ></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    {{ job.location }}
+                  </div>
+                  <div class="job-type">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect
+                        x="2"
+                        y="7"
+                        width="20"
+                        height="14"
+                        rx="2"
+                        ry="2"
+                      ></rect>
+                      <path
+                        d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"
+                      ></path>
+                    </svg>
+                    {{ job.type }}
+                  </div>
+                </div>
+                <p class="job-salary">{{ job.salary }}</p>
+              </div>
+
+              <div class="job-footer">
+                <p class="job-posted">Posted {{ job.postedDate }}</p>
+                <div class="job-actions">
+                  <button class="btn btn-save" aria-label="Save job">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <a
+                    [routerLink]="['/jobs', job.id]"
+                    class="btn btn-primary btn-sm"
+                    >Apply</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-card career-suggestions">
+          <div class="card-header">
+            <h2 class="card-title">Career Path Suggestions</h2>
+          </div>
+
+          <div class="career-list">
+            <div class="career-card" *ngFor="let career of careerSuggestions">
+              <div class="career-header">
+                <h3 class="career-title">{{ career.role }}</h3>
+                <div class="career-match">
+                  <div class="match-percentage">
+                    {{ career.matchPercentage }}%
+                  </div>
+                </div>
+              </div>
+
+              <p class="career-description">{{ career.description }}</p>
+
+              <div class="career-skills">
+                <h4 class="skills-title">Skills to Develop:</h4>
+                <div class="skills-list">
+                  <span
+                    class="career-skill"
+                    *ngFor="let skill of career.requiredSkills"
+                    >{{ skill }}</span
+                  >
+                </div>
+              </div>
+
+              <a href="#" class="learn-more-link">Learn more about this path</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-sidebar">
+        <div class="dashboard-card application-tracker">
+          <div class="card-header">
+            <h2 class="card-title">Application Tracker</h2>
+            <a routerLink="/jobs" class="view-all-link">View All</a>
+          </div>
+
+          <div class="application-list">
+            <div class="application-card" *ngFor="let app of applications">
+              <div class="application-logo">
+                <img [src]="app.logo" [alt]="app.company + ' logo'" />
+              </div>
+              <div class="application-content">
+                <h3 class="application-title">{{ app.jobTitle }}</h3>
+                <p class="application-company">{{ app.company }}</p>
+                <div class="application-date">
+                  Applied on {{ app.date | date : "mediumDate" }}
+                </div>
+                <div class="application-stage">
+                  <span [class]="'stage-pill ' + getStageClass(app.stage)">
+                    {{ getStageText(app.stage) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-card match-progress">
+          <div class="card-header">
+            <h2 class="card-title">Your Match Progress</h2>
+          </div>
+
+          <div class="progress-content">
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Profile Completion</span>
+                <span>80%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 80%"></div>
+              </div>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Skills Verification</span>
+                <span>60%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%"></div>
+              </div>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Resume Score</span>
+                <span>75%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 75%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="progress-actions">
+            <a routerLink="/profile" class="btn btn-primary btn-block"
+              >Improve Your Match</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,347 @@
-<p>chat works!</p>
+<div class="chat-page">
+  <div class="container">
+    <!-- Loading state -->
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="loader"></div>
+      <p>Loading messages...</p>
+    </div>
+
+    <div class="chat-container" *ngIf="!isLoading">
+      <!-- Chat sidebar -->
+      <div class="chat-sidebar" [class.mobile-hidden]="!!selectedContact">
+        <div class="sidebar-header">
+          <h1 class="sidebar-title">Messages</h1>
+          <div class="unread-count" *ngIf="getUnreadTotal() > 0">
+            {{ getUnreadTotal() }}
+          </div>
+        </div>
+
+        <div class="search-box">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search contacts..."
+            [(ngModel)]="searchTerm"
+            (input)="searchContacts()"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="search-icon"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+
+        <div class="contacts-list">
+          <div class="empty-contacts" *ngIf="filteredContacts.length === 0">
+            <p>No contacts found</p>
+          </div>
+
+          <div
+            class="contact-card"
+            *ngFor="let contact of filteredContacts"
+            [class.active]="contact.isSelected"
+            [class.unread]="contact.unreadCount > 0"
+            (click)="selectContact(contact)"
+          >
+            <div class="contact-avatar">
+              <img [src]="contact.avatar" [alt]="contact.name" />
+              <div class="online-indicator" *ngIf="contact.isOnline"></div>
+            </div>
+
+            <div class="contact-info">
+              <div class="contact-details">
+                <h3 class="contact-name">{{ contact.name }}</h3>
+                <span class="contact-time">{{ contact.time }}</span>
+              </div>
+
+              <div class="contact-meta">
+                <p class="contact-company">
+                  {{ contact.company }} • {{ contact.jobTitle }}
+                </p>
+              </div>
+
+              <div class="contact-preview">
+                <p class="last-message">{{ contact.lastMessage }}</p>
+                <div class="unread-badge" *ngIf="contact.unreadCount > 0">
+                  {{ contact.unreadCount }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat main area -->
+      <div
+        class="chat-main"
+        *ngIf="selectedContact"
+        [class.mobile-hidden]="showChatInfo"
+      >
+        <div class="chat-header">
+          <button class="back-btn" (click)="selectedContact = null">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <div class="chat-contact" (click)="toggleChatInfo()">
+            <div class="contact-avatar">
+              <img
+                [src]="selectedContact.avatar"
+                [alt]="selectedContact.name"
+              />
+              <div
+                class="online-indicator"
+                *ngIf="selectedContact.isOnline"
+              ></div>
+            </div>
+
+            <div class="contact-info">
+              <h3 class="contact-name">{{ selectedContact.name }}</h3>
+              <p class="contact-status">
+                <span *ngIf="selectedContact.isOnline">Online</span>
+                <span *ngIf="!selectedContact.isOnline">Offline</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="chat-actions">
+            <button class="action-btn info-btn" (click)="toggleChatInfo()">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="chat-messages" #chatMessages>
+          <div class="messages-container">
+            <!-- Date divider -->
+            <div
+              class="date-divider"
+              *ngFor="let message of messages; let i = index"
+            >
+              <div class="date-label" *ngIf="getMessageDate(message, i)">
+                {{ getMessageDate(message, i) | date : "mediumDate" }}
+              </div>
+
+              <!-- Message -->
+              <div
+                class="message"
+                [class.sent]="message.isCurrentUser"
+                [class.received]="!message.isCurrentUser"
+              >
+                <div class="message-content">
+                  {{ message.text }}
+                </div>
+                <div class="message-meta">
+                  <span class="message-time">{{ message.time }}</span>
+                  <span class="message-status" *ngIf="message.isCurrentUser">
+                    <svg
+                      *ngIf="message.status === 'sent'"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <svg
+                      *ngIf="
+                        message.status === 'delivered' ||
+                        message.status === 'read'
+                      "
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="17 2 12 7 7 2"></polyline>
+                      <polyline points="17 22 12 17 7 22"></polyline>
+                    </svg>
+                    <svg
+                      *ngIf="message.status === 'read'"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"
+                      ></path>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input">
+          <div class="input-container">
+            <input
+              type="text"
+              class="message-input"
+              placeholder="Type a message..."
+              [(ngModel)]="newMessage"
+              (keyup.enter)="sendMessage()"
+            />
+            <button
+              class="send-btn"
+              [disabled]="!newMessage.trim()"
+              (click)="sendMessage()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat info sidebar -->
+      <div class="chat-info" *ngIf="selectedContact && showChatInfo">
+        <div class="info-header">
+          <button class="close-btn" (click)="toggleChatInfo()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <h2 class="info-title">Contact Info</h2>
+        </div>
+
+        <div class="info-content">
+          <div class="info-profile">
+            <div class="big-avatar">
+              <img
+                [src]="selectedContact.avatar"
+                [alt]="selectedContact.name"
+              />
+              <div
+                class="big-online-indicator"
+                *ngIf="selectedContact.isOnline"
+              ></div>
+            </div>
+            <h3 class="profile-name">{{ selectedContact.name }}</h3>
+            <p class="profile-status">
+              <span *ngIf="selectedContact.isOnline" class="online-status"
+                >Online</span
+              >
+              <span *ngIf="!selectedContact.isOnline" class="offline-status"
+                >Offline</span
+              >
+            </p>
+          </div>
+
+          <div class="info-details">
+            <div class="info-section">
+              <h4 class="section-title">Company</h4>
+              <p class="section-content">{{ selectedContact.company }}</p>
+            </div>
+            <div class="info-section">
+              <h4 class="section-title">Job Title</h4>
+              <p class="section-content">{{ selectedContact.jobTitle }}</p>
+            </div>
+          </div>
+
+          <div class="info-actions">
+            <button class="btn btn-primary btn-block">View Profile</button>
+            <button class="btn btn-outline btn-block">Block Contact</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state when no contact is selected -->
+      <div class="empty-chat" *ngIf="!selectedContact && !isLoading">
+        <div class="empty-illustration">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="64"
+            height="64"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            ></path>
+          </svg>
+        </div>
+        <h2>Your Messages</h2>
+        <p>Select a conversation to start chatting</p>
+      </div>
+    </div>
+  </div>
+</div>

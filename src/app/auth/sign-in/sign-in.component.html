@@ -1,1 +1,165 @@
-<p>sign-in works!</p>
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2 class="auth-title">Welcome Back</h2>
+      <p class="auth-subtitle">
+        {{
+          isAdminMode
+            ? "Sign in to your admin account"
+            : "Sign in to your account"
+        }}
+      </p>
+    </div>
+
+    <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <!-- Admin specific field -->
+      <div class="form-group" *ngIf="isAdminMode">
+        <label for="adminCode" class="form-label">Admin Code</label>
+        <input
+          type="text"
+          id="adminCode"
+          formControlName="adminCode"
+          class="form-control"
+          [class.is-invalid]="
+            signinForm.get('adminCode')?.invalid &&
+            signinForm.get('adminCode')?.touched
+          "
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            signinForm.get('adminCode')?.invalid &&
+            signinForm.get('adminCode')?.touched
+          "
+        >
+          Admin code is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.is-invalid]="
+            signinForm.get('email')?.invalid && signinForm.get('email')?.touched
+          "
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            signinForm.get('email')?.invalid && signinForm.get('email')?.touched
+          "
+        >
+          <span *ngIf="signinForm.get('email')?.errors?.['required']"
+            >Email is required</span
+          >
+          <span *ngIf="signinForm.get('email')?.errors?.['email']"
+            >Please enter a valid email</span
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="password-label-group">
+          <label for="password" class="form-label">Password</label>
+          <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+        <div class="password-input">
+          <input
+            [type]="isPasswordVisible ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            [class.is-invalid]="
+              signinForm.get('password')?.invalid &&
+              signinForm.get('password')?.touched
+            "
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            aria-label="Toggle password visibility"
+          >
+            <svg
+              *ngIf="!isPasswordVisible"
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <svg
+              *ngIf="isPasswordVisible"
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+              ></path>
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+          </button>
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            signinForm.get('password')?.invalid &&
+            signinForm.get('password')?.touched
+          "
+        >
+          Password is required
+        </div>
+      </div>
+
+      <div class="form-group form-check" *ngIf="!isAdminMode">
+        <input
+          type="checkbox"
+          id="rememberMe"
+          formControlName="rememberMe"
+          class="form-check-input"
+        />
+        <label for="rememberMe" class="form-check-label">Remember me</label>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+      </div>
+
+      <div class="auth-separator">
+        <span>or</span>
+      </div>
+
+      <div class="auth-link" *ngIf="!isAdminMode">
+        Don't have an account? <a routerLink="/auth/role-selection">Sign Up</a>
+      </div>
+
+      <div class="admin-toggle">
+        <button
+          type="button"
+          (click)="toggleAdminMode()"
+          class="admin-toggle-btn"
+        >
+          {{ isAdminMode ? "Sign in as User" : "Sign in as Admin" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

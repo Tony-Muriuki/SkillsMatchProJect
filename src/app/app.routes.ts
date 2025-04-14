@@ -38,7 +38,11 @@ export const routes: Routes = [
     path: 'jobs',
     children: [
       { path: '', component: JobListingsComponent },
-      { path: ':id', component: JobDetailsComponent },
+      {
+        path: ':id',
+        component: JobDetailsComponent,
+        // renderMode: 'no-prerender',
+      },
     ],
   },
   { path: 'notifications', component: NotificationsComponent },

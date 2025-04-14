@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -14,18 +14,28 @@ export class HeaderComponent implements OnInit {
   userRole: 'job-seeker' | 'recruiter' | 'admin' | null = null;
   isMenuOpen = false;
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   ngOnInit(): void {
-    // This would typically come from an auth service
     this.checkAuthStatus();
   }
 
   checkAuthStatus(): void {
-    // Mock implementation - replace with actual auth service
-    const savedAuth = localStorage.getItem('auth');
-    if (savedAuth) {
-      const authData = JSON.parse(savedAuth);
-      this.isLoggedIn = true;
-      this.userRole = authData.role;
+    if (isPlatformBrowser(this.platformId)) {
+      const savedAuth = localStorage.getItem('auth');
+      if (savedAuth) {
+        try {
+          const authData = JSON.parse(savedAuth);
+          this.isLoggedIn = true;
+          this.userRole = authData.role;
+        } catch (error) {
+          console.error('Invalid auth data in localStorage', error);
+          // Clear the corrupted data
+          localStorage.removeItem('auth');
+          this.isLoggedIn = false;
+          this.userRole = null;
+        }
+      }
     }
   }
 
@@ -34,11 +44,11 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
-    // Mock implementation - replace with actual auth service
-    localStorage.removeItem('auth');
-    this.isLoggedIn = false;
-    this.userRole = null;
-    // Navigate to home
-    window.location.href = '/';
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('auth');
+      this.isLoggedIn = false;
+      this.userRole = null;
+      window.location.href = '/';
+    }
   }
 }

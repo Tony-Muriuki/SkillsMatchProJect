@@ -1,178 +1,43 @@
-/* Hero Section */
+// Main variables
+$primary-color: #4318d1;
+$primary-light: rgba(67, 24, 209, 0.1);
+$white: #ffffff;
+$light-gray: #f9fafb;
+$medium-gray: #e0e0e0;
+$dark-gray: #4b5563;
+$black: #111827;
+$success: #22c55e;
+
+// Hero Section
 .hero-section {
-  padding: 4rem 0;
-  background-color: var(--white);
+  padding: 5rem 0;
+  background-color: $white;
   overflow: hidden;
+  position: relative;
 
-  .feature-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-  }
-
-  .feature-description {
-    font-size: 0.875rem;
-    color: var(--dark-gray);
-  }
-
-  /* Benefits Section */
-  .benefits-section {
-    padding: 5rem 0;
-    background-color: var(--white);
-  }
-
-  .benefits-container {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-
-    @media (min-width: 992px) {
-      flex-direction: row;
-      align-items: center;
-    }
-  }
-
-  .benefits-image {
-    flex: 1;
-
-    img {
-      width: 100%;
-      max-width: 500px;
-      height: auto;
-      border-radius: 1rem;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-        0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-
-    @media (max-width: 991px) {
-      display: flex;
-      justify-content: center;
-    }
-  }
-
-  .benefit-cards {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .benefit-card {
-    display: flex;
-    gap: 1rem;
-    padding: 1.5rem;
-    background-color: var(--light-gray);
-    border-radius: 0.75rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-      transform: translateX(5px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-  }
-
-  .benefit-icon {
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  .benefit-content {
-    flex: 1;
-  }
-
-  .benefit-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-
-  .benefit-description {
-    font-size: 0.875rem;
-    color: var(--dark-gray);
-  }
-
-  /* CTA Section */
-  .cta-section {
-    padding: 4rem 0;
-    background-color: var(--primary);
-  }
-
-  .cta-content {
-    text-align: center;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  .cta-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 1rem;
-  }
-
-  .cta-description {
-    font-size: 1.125rem;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 2rem;
-  }
-
-  .btn-large {
-    padding: 1rem 2rem;
-    font-size: 1.125rem;
-  }
-
-  /* Stats Section */
-  .stats-section {
-    padding: 5rem 0;
-    background-color: var(--white);
-  }
-
-  .stats-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-
-    @media (min-width: 768px) {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  .stats-card {
-    text-align: center;
-    padding: 2rem;
-    background-color: var(--light-gray);
-    border-radius: 0.75rem;
-    transition: transform 0.3s ease;
-
-    &:hover {
-      transform: translateY(-5px);
-    }
-  }
-
-  .stats-number {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 0.5rem;
-  }
-
-  .stats-label {
-    font-size: 1rem;
-    color: var(--dark-gray);
-    font-weight: 500;
+  &::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -25%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      $primary-light 0%,
+      rgba(255, 255, 255, 0) 70%
+    );
+    z-index: 0;
+    border-radius: 50%;
   }
 }
 
 .hero-content {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 4rem;
+  position: relative;
+  z-index: 1;
 
   @media (min-width: 992px) {
     flex-direction: row;
@@ -189,25 +54,49 @@
 }
 
 .hero-title {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 2.75rem;
+  font-weight: 800;
   line-height: 1.2;
   margin-bottom: 1.5rem;
+  color: $black;
+  letter-spacing: -0.5px;
+
+  .text-primary {
+    color: $primary-color;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0.2rem;
+      left: 0;
+      right: 0;
+      height: 0.6rem;
+      background-color: rgba($primary-color, 0.15);
+      z-index: -1;
+      border-radius: 0.25rem;
+    }
+  }
 
   @media (min-width: 768px) {
-    font-size: 3rem;
+    font-size: 3.5rem;
   }
 
   @media (min-width: 1200px) {
-    font-size: 3.5rem;
+    font-size: 4rem;
   }
 }
 
 .hero-description {
   font-size: 1.125rem;
-  color: var(--dark-gray);
-  margin-bottom: 2rem;
+  line-height: 1.7;
+  color: $dark-gray;
+  margin-bottom: 2.5rem;
   max-width: 600px;
+
+  @media (min-width: 768px) {
+    font-size: 1.25rem;
+  }
 }
 
 .hero-buttons {
@@ -216,39 +105,113 @@
   flex-wrap: wrap;
 }
 
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba($black, 0.1),
+      0 4px 6px -2px rgba($black, 0.05);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+.btn-primary {
+  background-color: $primary-color;
+  color: $white;
+  border: none;
+
+  &:hover {
+    background-color: darken($primary-color, 5%);
+  }
+}
+
+.btn-secondary {
+  background-color: $white;
+  color: $primary-color;
+  border: 2px solid $primary-color;
+
+  &:hover {
+    background-color: $primary-light;
+  }
+}
+
 .hero-image {
   flex: 1;
   display: flex;
   justify-content: center;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 30%;
+    height: 60%;
+    background-color: $primary-light;
+    z-index: -1;
+    border-radius: 1rem;
+    transform: rotate(-15deg);
+  }
 
   img {
     max-width: 100%;
     height: auto;
     border-radius: 1rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-      0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 20px 25px -5px rgba($black, 0.1),
+      0 10px 10px -5px rgba($black, 0.04);
+    transform: perspective(1000px) rotateY(-5deg);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: perspective(1000px) rotateY(0deg);
+    }
   }
 }
 
-/* Features Section */
-.features-section {
+// How It Works Section - IMPROVED WITH CARD LAYOUT
+.how-it-works-section {
   padding: 5rem 0;
-  background-color: var(--light-gray);
+  background-color: $light-gray;
 }
 
 .section-header {
-  margin-bottom: 3rem;
+  text-align: center;
+  margin-bottom: 3.5rem;
 }
 
 .section-title {
-  font-size: 2.25rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  color: $black;
 }
 
 .section-description {
   font-size: 1.125rem;
-  color: var(--dark-gray);
+  color: $dark-gray;
   max-width: 700px;
   margin: 0 auto;
 }
@@ -256,7 +219,7 @@
 .feature-cards {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
@@ -268,42 +231,499 @@
 }
 
 .feature-card {
-  background-color: var(--white);
+  background-color: $white;
   border-radius: 1rem;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 20px rgba($black, 0.05);
+  overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba($primary-color, 0.08);
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba($black, 0.1);
+    border-color: rgba($primary-color, 0.2);
   }
 }
 
-.feature-icon {
+.feature-card-header {
+  padding: 1.5rem 1.5rem 0.75rem;
   position: relative;
-  width: 64px;
-  height: 64px;
-  margin-bottom: 1.5rem;
+  background: linear-gradient(
+    to bottom,
+    rgba($primary-color, 0.03) 0%,
+    rgba($primary-color, 0) 100%
+  );
+  display: flex;
+  align-items: center;
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: $primary-light;
+  color: $primary-color;
+  border-radius: 50%;
+  margin-right: 1rem;
+  transition: all 0.3s ease;
+  border: 2px solid rgba($primary-color, 0.2);
 
   img {
-    width: 100%;
-    height: 100%;
+    width: 30px;
+    height: 30px;
   }
 }
 
 .feature-icon-number {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 24px;
-  height: 24px;
-  background-color: var(--primary);
-  color: white;
+  top: 1rem;
+  right: 1rem;
+  width: 28px;
+  height: 28px;
+  background-color: $primary-color;
+  color: $white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.875rem;
+  font-weight: 700;
+  transition: transform 0.3s ease;
+
+  .feature-card:hover & {
+    transform: scale(1.2);
+  }
+}
+
+.feature-content {
+  padding: 0.75rem 1.5rem 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: $black;
+}
+
+.feature-description {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: $dark-gray;
+}
+
+// Benefits Section - IMPROVED WITH CARD LAYOUT
+.benefits-section {
+  padding: 5rem 0;
+  background-color: $white;
+}
+
+.benefits-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+
+  @media (min-width: 992px) {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+.benefits-image {
+  position: relative;
+
+  img {
+    width: 100%;
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba($black, 0.1),
+      0 10px 10px -5px rgba($black, 0.04);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -1.5rem;
+    right: -1.5rem;
+    width: 180px;
+    height: 180px;
+    background-color: $primary-light;
+    border-radius: 1rem;
+    z-index: -1;
+  }
+
+  @media (max-width: 991px) {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+
+    img {
+      max-width: 500px;
+    }
+  }
+}
+
+.benefit-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.benefit-card {
+  background-color: $white;
+  border: 1px solid rgba($primary-color, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  box-shadow: 0 4px 6px rgba($black, 0.03);
+
+  &:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 15px rgba($black, 0.05);
+    border-left: 3px solid $primary-color;
+  }
+}
+
+.benefit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 50px;
+  background-color: $primary-light;
+  color: $primary-color;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .benefit-card:hover & {
+    background-color: $primary-color;
+    color: $white;
+    transform: rotate(5deg);
+  }
+}
+
+.benefit-content {
+  flex: 1;
+}
+
+.benefit-title {
+  font-size: 1.125rem;
   font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: $black;
+}
+
+.benefit-description {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: $dark-gray;
+}
+
+// CTA Section
+.cta-section {
+  padding: 5rem 0;
+  background-color: $primary-color;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: -5%;
+    width: 30%;
+    height: 120%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    border-radius: 50%;
+    transform: rotate(-15deg);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10%;
+    right: -5%;
+    width: 30%;
+    height: 120%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    border-radius: 50%;
+    transform: rotate(15deg);
+  }
+}
+
+.cta-content {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: $white;
+  margin-bottom: 1.5rem;
+}
+
+.cta-description {
+  font-size: 1.125rem;
+  color: rgba($white, 0.9);
+  margin-bottom: 2.5rem;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-white {
+  background-color: $white;
+  color: $primary-color;
+  border: none;
+
+  &:hover {
+    background-color: rgba($white, 0.9);
+  }
+}
+
+.btn-outline-white {
+  background-color: transparent;
+  color: $white;
+  border: 2px solid $white;
+
+  &:hover {
+    background-color: rgba($white, 0.1);
+  }
+}
+
+// Testimonials Section
+.testimonials-section {
+  padding: 5rem 0;
+  background-color: $light-gray;
+}
+
+.testimonials-slider {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  background-color: $white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 15px -3px rgba($black, 0.1),
+    0 4px 6px -2px rgba($black, 0.05);
+  text-align: center;
+  position: relative;
+  margin: 2rem 1rem;
+}
+
+.testimonial-quote {
+  font-size: 4rem;
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: $primary-color;
+  opacity: 0.2;
+  line-height: 1;
+}
+
+.testimonial-content {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: $dark-gray;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.author-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  object-fit: cover;
+  border: 3px solid $primary-light;
+}
+
+.author-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: $black;
+}
+
+.author-title {
+  font-size: 0.875rem;
+  color: $dark-gray;
+}
+
+// Footer
+.footer {
+  background-color: $light-gray;
+  padding: 5rem 0 2rem;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: 3rem;
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer-brand {
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    img {
+      height: 40px;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $black;
+
+      span {
+        color: $primary-color;
+      }
+    }
+  }
+
+  .brand-description {
+    font-size: 0.875rem;
+    color: $dark-gray;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 1rem;
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background-color: $white;
+      color: $primary-color;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: $primary-color;
+        color: $white;
+        transform: translateY(-3px);
+      }
+    }
+  }
+}
+
+.footer-links {
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: $black;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.75rem;
+
+      a {
+        font-size: 0.875rem;
+        color: $dark-gray;
+        text-decoration: none;
+        transition: color 0.2s ease;
+        display: inline-block;
+
+        &:hover {
+          color: $primary-color;
+          transform: translateX(3px);
+        }
+      }
+    }
+  }
+}
+
+.footer-bottom {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid $medium-gray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .copyright {
+    font-size: 0.875rem;
+    color: $dark-gray;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 1.5rem;
+
+    a {
+      font-size: 0.875rem;
+      color: $dark-gray;
+      text-decoration: none;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
 }

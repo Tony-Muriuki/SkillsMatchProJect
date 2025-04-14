@@ -12,20 +12,25 @@
           match your abilities with the right opportunities.
         </p>
         <div class="hero-buttons">
-          <a routerLink="/auth/role-selection" class="btn btn-primary"
+          <a routerLink="/auth/role-selection" class="btn btn-primary btn-lg"
             >Get Started</a
           >
-          <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
+          <a href="#how-it-works" class="btn btn-secondary btn-lg"
+            >Learn More</a
+          >
         </div>
       </div>
       <div class="hero-image">
-        <img src="assets/hero-image.png" alt="SkillMatch AI Platform" />
+        <img
+          src="src/app/assets/images/jakub-zerdzicki-evqxKaGDpfs-unsplash.jpg"
+          alt="SkillMatch AI Platform"
+        />
       </div>
     </div>
   </div>
 </section>
 
-<section class="features-section" id="how-it-works">
+<section class="how-it-works-section" id="how-it-works">
   <div class="container">
     <div class="section-header text-center">
       <h2 class="section-title">How It Works</h2>
@@ -40,15 +45,19 @@
         class="feature-card"
         *ngFor="let card of featureCards; let i = index"
       >
-        <div class="feature-icon">
+        <div class="feature-card-header">
+          <div class="feature-icon">
+            <img
+              [src]="'assets/icons/' + card.icon + '.svg'"
+              [alt]="card.title"
+            />
+          </div>
           <div class="feature-icon-number">{{ i + 1 }}</div>
-          <img
-            [src]="'assets/icons/' + card.icon + '.svg'"
-            [alt]="card.title"
-          />
         </div>
-        <h3 class="feature-title">{{ card.title }}</h3>
-        <p class="feature-description">{{ card.description }}</p>
+        <div class="feature-content">
+          <h3 class="feature-title">{{ card.title }}</h3>
+          <p class="feature-description">{{ card.description }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -66,7 +75,10 @@
 
     <div class="benefits-container">
       <div class="benefits-image">
-        <img src="assets/job-seeker-benefits.png" alt="Job Seeker Benefits" />
+        <img
+          src="assets/images/job-seeker-benefits.png"
+          alt="Job Seeker Benefits"
+        />
       </div>
 
       <div class="benefit-cards">
@@ -95,9 +107,14 @@
         Join thousands of job seekers and recruiters using SkillMatch AI to
         revolutionize the hiring process.
       </p>
-      <a routerLink="/auth/role-selection" class="btn btn-primary btn-large"
-        >Sign Up Now</a
-      >
+      <div class="cta-buttons">
+        <a routerLink="/auth/role-selection" class="btn btn-white btn-lg"
+          >Sign Up Now</a
+        >
+        <a routerLink="/auth/signin" class="btn btn-outline-white btn-lg"
+          >Sign In</a
+        >
+      </div>
     </div>
   </div>
 </section>

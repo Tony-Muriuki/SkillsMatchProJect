@@ -155,3 +155,44 @@
     }
   }
 }
+
+/* Role Selector Styles */
+.role-selector {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.role-selector-title {
+  font-size: 0.875rem;
+  color: var(--dark-gray);
+  margin-bottom: 0.5rem;
+}
+
+.role-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.role-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--medium-gray);
+  color: var(--dark-gray);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  &.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+}

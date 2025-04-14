@@ -4,16 +4,18 @@
       <h2 class="auth-title">Welcome Back</h2>
       <p class="auth-subtitle">
         {{
-          isAdminMode
+          userRole === "admin"
             ? "Sign in to your admin account"
-            : "Sign in to your account"
+            : userRole === "recruiter"
+            ? "Sign in to your recruiter account"
+            : "Sign in to your job seeker account"
         }}
       </p>
     </div>
 
     <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="auth-form">
       <!-- Admin specific field -->
-      <div class="form-group" *ngIf="isAdminMode">
+      <div class="form-group" *ngIf="userRole === 'admin'">
         <label for="adminCode" class="form-label">Admin Code</label>
         <input
           type="text"
@@ -129,7 +131,7 @@
         </div>
       </div>
 
-      <div class="form-group form-check" *ngIf="!isAdminMode">
+      <div class="form-group form-check" *ngIf="userRole !== 'admin'">
         <input
           type="checkbox"
           id="rememberMe"
@@ -147,18 +149,39 @@
         <span>or</span>
       </div>
 
-      <div class="auth-link" *ngIf="!isAdminMode">
+      <div class="auth-link" *ngIf="userRole !== 'admin'">
         Don't have an account? <a routerLink="/auth/role-selection">Sign Up</a>
       </div>
 
-      <div class="admin-toggle">
-        <button
-          type="button"
-          (click)="toggleAdminMode()"
-          class="admin-toggle-btn"
-        >
-          {{ isAdminMode ? "Sign in as User" : "Sign in as Admin" }}
-        </button>
+      <!-- Replace the admin toggle with role selector -->
+      <div class="role-selector">
+        <div class="role-selector-title">Sign in as:</div>
+        <div class="role-buttons">
+          <button
+            type="button"
+            class="role-toggle-btn"
+            [class.active]="userRole === 'job-seeker'"
+            (click)="selectRole('job-seeker')"
+          >
+            Job Seeker
+          </button>
+          <button
+            type="button"
+            class="role-toggle-btn"
+            [class.active]="userRole === 'recruiter'"
+            (click)="selectRole('recruiter')"
+          >
+            Recruiter
+          </button>
+          <button
+            type="button"
+            class="role-toggle-btn"
+            [class.active]="userRole === 'admin'"
+            (click)="selectRole('admin')"
+          >
+            Admin
+          </button>
+        </div>
       </div>
     </form>
   </div>

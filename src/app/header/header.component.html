@@ -12,7 +12,8 @@
 
       <nav class="nav-desktop" [class.hidden]="isMenuOpen">
         <ul class="nav-list">
-          <li class="nav-item">
+          <!-- Show Home and How It Works only when NOT logged in -->
+          <li class="nav-item" *ngIf="!isLoggedIn">
             <a
               routerLink="/"
               routerLinkActive="active"
@@ -20,10 +21,11 @@
               >Home</a
             >
           </li>
-          <li class="nav-item">
+          <!-- Show Jobs only when logged in -->
+          <li class="nav-item" *ngIf="isLoggedIn">
             <a routerLink="/jobs" routerLinkActive="active">Jobs</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="!isLoggedIn">
             <a href="#how-it-works">How It Works</a>
           </li>
           <li class="nav-item" *ngIf="isLoggedIn && userRole === 'job-seeker'">
@@ -105,7 +107,8 @@
     <!-- Mobile menu -->
     <div class="mobile-menu" [class.active]="isMenuOpen">
       <ul class="mobile-nav-list">
-        <li class="mobile-nav-item">
+        <!-- Show Home and How It Works only when NOT logged in -->
+        <li class="mobile-nav-item" *ngIf="!isLoggedIn">
           <a
             routerLink="/"
             routerLinkActive="active"
@@ -113,10 +116,11 @@
             >Home</a
           >
         </li>
-        <li class="mobile-nav-item">
+        <!-- Show Jobs only when logged in -->
+        <li class="mobile-nav-item" *ngIf="isLoggedIn">
           <a routerLink="/jobs" routerLinkActive="active">Jobs</a>
         </li>
-        <li class="mobile-nav-item">
+        <li class="mobile-nav-item" *ngIf="!isLoggedIn">
           <a href="#how-it-works">How It Works</a>
         </li>
         <li

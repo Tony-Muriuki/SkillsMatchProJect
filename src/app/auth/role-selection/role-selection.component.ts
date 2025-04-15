@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router'; // Add Router import
 
 interface Role {
   id: string;
@@ -43,11 +43,15 @@ export class RoleSelectionComponent {
 
   selectedRole: string | null = null;
 
+  constructor(private router: Router) {} // Add router constructor
+
   selectRole(roleId: string): void {
     this.selectedRole = roleId;
   }
 
   continueToSignup(): void {
-    // Will be redirected to appropriate signup form in template
+    if (this.selectedRole) {
+      this.router.navigate(['/auth/signup', this.selectedRole]);
+    }
   }
 }

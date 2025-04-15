@@ -22,6 +22,7 @@ export const routes: Routes = [
     children: [
       { path: 'signin', component: SignInComponent },
       { path: 'signup', component: SignUpComponent },
+      { path: 'signup/:role', component: SignUpComponent }, // Add this route to handle role parameter
       { path: 'role-selection', component: RoleSelectionComponent },
     ],
   },

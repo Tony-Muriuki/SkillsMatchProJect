@@ -1,7 +1,7 @@
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-logo">
-      <img src="assets/logo.svg" alt="SkillMatch AI" class="logo-img" />
+      <!-- <img src="assets/logo.svg" alt="SkillMatch AI" class="logo-img" /> -->
       <span class="logo-text"
         >SkillMatch <span class="text-primary">AI</span></span
       >
@@ -71,14 +71,14 @@
     </div>
 
     <div class="auth-actions">
-      <a
-        [routerLink]="['/auth/signup', selectedRole]"
+      <button
+        (click)="continueToSignup()"
         class="btn btn-primary btn-block"
         [class.disabled]="!selectedRole"
         [attr.aria-disabled]="!selectedRole"
       >
         Continue
-      </a>
+      </button>
     </div>
 
     <div class="auth-separator">

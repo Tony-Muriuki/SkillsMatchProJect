@@ -41,7 +41,11 @@ export const routes: Routes = [
       {
         path: ':id',
         component: JobDetailsComponent,
-        // renderMode: 'no-prerender',
+        // Explicitly set NOT to prerender
+        data: {
+          prerender: false,
+          renderMode: 'client',
+        },
       },
     ],
   },

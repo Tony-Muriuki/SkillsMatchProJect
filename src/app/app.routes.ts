@@ -22,7 +22,15 @@ export const routes: Routes = [
     children: [
       { path: 'signin', component: SignInComponent },
       { path: 'signup', component: SignUpComponent },
-      { path: 'signup/:role', component: SignUpComponent }, // Add this route to handle role parameter
+      {
+        path: 'signup/:role',
+        component: SignUpComponent,
+        // Add client rendering to avoid prerendering issues
+        data: {
+          prerender: false,
+          renderMode: 'client',
+        },
+      },
       { path: 'role-selection', component: RoleSelectionComponent },
     ],
   },

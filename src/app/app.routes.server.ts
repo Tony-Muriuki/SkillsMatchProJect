@@ -6,6 +6,11 @@ export const serverRoutes: ServerRoute[] = [
     path: 'jobs/:id',
     renderMode: RenderMode.Client, // Change to client-side rendering for this route
   },
+  // Configuration for the auth/signup/:role route
+  {
+    path: 'auth/signup/:role',
+    renderMode: RenderMode.Client, // Client-side rendering for this route
+  },
   // Default for all other routes
   {
     path: '**',

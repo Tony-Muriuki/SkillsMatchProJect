@@ -1,0 +1,292 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User roles
+enum Role {
+  JOBSEEKER
+  RECRUITER
+  ADMIN
+}
+
+// User model
+model User {
+  id                String        @id @default(uuid())
+  email             String        @unique
+  password          String
+  name              String
+  role              Role
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  profile           Profile?
+  jobsPosted        Job[]         @relation("JobPoster")
+  applications      Application[] @relation("JobSeeker")
+  portfolio         Portfolio?    @relation("UserPortfolio")
+  cv                CV?           @relation("UserCV")
+  receivedMatches   Match[]       @relation("ReceivedMatches")
+  notifications     Notification[]
+  messagesSent      Message[]     @relation("MessageSender")
+  messagesReceived  Message[]     @relation("MessageReceiver")
+}
+
+// Profile model
+model Profile {
+  id                String        @id @default(uuid())
+  userId            String        @unique
+  title             String?
+  company           String?
+  bio               String?
+  location          String?
+  contactEmail      String?
+  phone             String?
+  profileImageUrl   String?
+  linkedinUrl       String?
+  githubUrl         String?
+  websiteUrl        String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Skill model
+model Skill {
+  id                String        @id @default(uuid())
+  name              String        @unique
+  category          String
+  description       String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  portfolioSkills   PortfolioSkill[]
+  jobSkills         JobSkill[]
+}
+
+// Job model
+model Job {
+  id                String        @id @default(uuid())
+  title             String
+  description       String
+  company           String
+  location          String
+  type              String // full-time, part-time, contract, etc.
+  category          String?
+  experience        String?
+  salary            String?
+  recruiterId       String
+  active            Boolean       @default(true)
+  postedDate        DateTime      @default(now())
+  deadline          DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  recruiter         User          @relation("JobPoster", fields: [recruiterId], references: [id])
+  skills            JobSkill[]
+  applications      Application[]
+  matches           Match[]
+}
+
+// JobSkill junction table
+model JobSkill {
+  id                String        @id @default(uuid())
+  jobId             String
+  skillId           String
+  importance        Int           @default(3) // 1-5 scale
+  createdAt         DateTime      @default(now())
+  
+  // Relationships
+  job               Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  skill             Skill         @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, skillId])
+}
+
+// Portfolio model
+model Portfolio {
+  id                String        @id @default(uuid())
+  userId            String        @unique
+  summary           String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  user              User          @relation("UserPortfolio", fields: [userId], references: [id], onDelete: Cascade)
+  skills            PortfolioSkill[]
+  projects          Project[]
+  experiences       Experience[]
+  education         Education[]
+}
+
+// PortfolioSkill junction table
+model PortfolioSkill {
+  id                String        @id @default(uuid())
+  portfolioId       String
+  skillId           String
+  proficiency       Int // 1-5 scale
+  yearsOfExperience Float?
+  createdAt         DateTime      @default(now())
+  
+  // Relationships
+  portfolio         Portfolio     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  skill             Skill         @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([portfolioId, skillId])
+}
+
+// Project model
+model Project {
+  id                String        @id @default(uuid())
+  portfolioId       String
+  title             String
+  description       String?
+  projectUrl        String?
+  imageUrl          String?
+  technologies      String?       // Comma-separated list
+  startDate         DateTime?
+  endDate           DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  portfolio         Portfolio     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+// Experience model
+model Experience {
+  id                String        @id @default(uuid())
+  portfolioId       String
+  title             String
+  company           String
+  location          String?
+  description       String?
+  startDate         DateTime
+  endDate           DateTime?
+  current           Boolean       @default(false)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  portfolio         Portfolio     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+// Education model
+model Education {
+  id                String        @id @default(uuid())
+  portfolioId       String
+  school            String
+  degree            String
+  field             String
+  startDate         DateTime
+  endDate           DateTime?
+  current           Boolean       @default(false)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  portfolio         Portfolio     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+// CV model
+model CV {
+  id                String        @id @default(uuid())
+  userId            String        @unique
+  fileUrl           String
+  fileName          String
+  fileSize          Int
+  uploadDate        DateTime      @default(now())
+  parsedSkills      String?       // JSON array of skills extracted from CV
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  user              User          @relation("UserCV", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Application model
+model Application {
+  id                String        @id @default(uuid())
+  jobId             String
+  applicantId       String
+  status            String        // applied, screening, interview, offer, rejected
+  coverLetter       String?
+  matchPercentage   Float?
+  appliedDate       DateTime      @default(now())
+  lastUpdated       DateTime      @updatedAt
+  
+  // Relationships
+  job               Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  applicant         User          @relation("JobSeeker", fields: [applicantId], references: [id], onDelete: Cascade)
+  interviews        Interview[]
+
+  @@unique([jobId, applicantId])
+}
+
+// Interview model
+model Interview {
+  id                String        @id @default(uuid())
+  applicationId     String
+  scheduledDate     DateTime
+  scheduledTime     String
+  status            String        // scheduled, completed, cancelled
+  notes             String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relationships
+  application       Application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+}
+
+// AI Match model for storing job-to-candidate matches
+model Match {
+  id                String        @id @default(uuid())
+  jobId             String
+  candidateId       String
+  matchPercentage   Float
+  createdAt         DateTime      @default(now())
+  
+  // Relationships
+  job               Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  candidate         User          @relation("ReceivedMatches", fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, candidateId])
+}
+
+// Message model for chat system
+model Message {
+  id                String        @id @default(uuid())
+  senderId          String
+  receiverId        String
+  content           String
+  isRead            Boolean       @default(false)
+  timestamp         DateTime      @default(now())
+  
+  // Relationships
+  sender            User          @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver          User          @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+// Notification model
+model Notification {
+  id                String        @id @default(uuid())
+  userId            String
+  type              String        // job, message, profile, application, interview, system
+  title             String
+  content           String
+  isRead            Boolean       @default(false)
+  link              String?
+  actionText        String?
+  createdAt         DateTime      @default(now())
+  
+  // Relationships
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

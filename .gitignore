@@ -1,5 +1,3 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
 # Compiled output
 /dist
 /tmp
@@ -40,3 +38,83 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Production build
+/dist
+/build
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor configs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Prisma
+/prisma/migrations/
+/prisma/dev.db
+
+# Uploads
+/uploads/*
+!/uploads/.gitkeep
+!/uploads/cvs/.gitkeep
+!/uploads/profiles/.gitkeep
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Production build
+/dist
+/build
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor configs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Prisma
+/prisma/migrations/
+/prisma/dev.db
+
+# Uploads
+/uploads/*
+!/uploads/.gitkeep
+!/uploads/cvs/.gitkeep
+!/uploads/profiles/.gitkeep

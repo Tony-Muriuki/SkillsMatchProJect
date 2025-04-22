@@ -8,7 +8,6 @@ import { Role } from '@prisma/client';
 const router = express.Router();
 
 /**
- * @swagger
  * /api/ai/match-jobs:
  *   post:
  *     summary: Match job seeker with jobs based on skills
@@ -32,7 +31,6 @@ router.post(
 );
 
 /**
- * @swagger
  * /api/ai/search-candidates:
  *   post:
  *     summary: Search candidates based on natural language query
@@ -85,7 +83,6 @@ router.post(
 );
 
 /**
- * @swagger
  * /api/ai/career-paths:
  *   post:
  *     summary: Get career path recommendations based on skills

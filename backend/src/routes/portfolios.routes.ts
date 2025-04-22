@@ -218,7 +218,6 @@ router.delete(
 );
 
 /**
- * @swagger
  * /api/portfolios/education:
  *   post:
  *     summary: Add education to portfolio

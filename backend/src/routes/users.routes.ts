@@ -211,7 +211,6 @@ router.put(
 );
 
 /**
- * @swagger
  * /api/users/{id}:
  *   delete:
  *     summary: Delete user

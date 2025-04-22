@@ -249,7 +249,6 @@ router.put('/:id', [authenticate, validate], jobsController.updateJob);
 router.delete('/:id', authenticate, jobsController.deleteJob);
 
 /**
- * @swagger
  * /api/jobs/{id}/toggle-status:
  *   patch:
  *     summary: Toggle job active status

@@ -86,7 +86,6 @@ router.put('/mark-all-read', authenticate, (req, res) => {
 });
 
 /**
- * @swagger
  * /api/notifications/{id}:
  *   delete:
  *     summary: Delete a notification

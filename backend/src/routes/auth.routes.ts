@@ -7,7 +7,6 @@ import * as authController from '../controllers/auth.controller';
 const router = express.Router();
 
 /**
- * @swagger
  * /api/auth/register:
  *   post:
  *     summary: Register a new user
@@ -74,7 +73,6 @@ router.post(
 );
 
 /**
- * @swagger
  * /api/auth/login:
  *   post:
  *     summary: Login a user
@@ -114,7 +112,6 @@ router.post(
 );
 
 /**
- * @swagger
  * /api/auth/me:
  *   get:
  *     summary: Get current user information

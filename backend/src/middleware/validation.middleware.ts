@@ -14,7 +14,7 @@ export const validate = (
 
   if (!errors.isEmpty()) {
     const errorMessages = errors.array().map((error) => ({
-      field: error.path,
+      field: (error as any).path || (error as any).param || 'unknown',
       message: error.msg,
     }));
 

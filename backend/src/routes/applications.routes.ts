@@ -8,7 +8,6 @@ import { Role } from '@prisma/client';
 const router = express.Router();
 
 /**
- * @swagger
  * /api/applications:
  *   get:
  *     summary: Get all applications for current job seeker
@@ -30,7 +29,6 @@ router.get(
 );
 
 /**
- * @swagger
  * /api/applications/job/{jobId}:
  *   get:
  *     summary: Get all applications for a specific job
@@ -61,7 +59,6 @@ router.get(
 );
 
 /**
- * @swagger
  * /api/applications:
  *   post:
  *     summary: Apply for a job
@@ -107,7 +104,6 @@ router.post(
 );
 
 /**
- * @swagger
  * /api/applications/{id}/status:
  *   patch:
  *     summary: Update application status
@@ -161,7 +157,6 @@ router.patch(
 );
 
 /**
- * @swagger
  * /api/applications/{id}/interview:
  *   post:
  *     summary: Schedule an interview for an application

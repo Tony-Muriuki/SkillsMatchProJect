@@ -2,8 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsDoc from 'swagger-jsdoc';
+
 import path from 'path';
 
 // Import middleware
@@ -50,8 +49,6 @@ const swaggerOptions = {
   apis: ['./src/routes/*.ts'], // Path to the API routes
 };
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
 // Middleware
 // In src/app.ts
 app.use(
@@ -75,9 +72,6 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
-// API documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Import routes
 import authRoutes from './routes/auth.routes';
@@ -105,8 +99,6 @@ app.use('/api/notifications', notificationsRoutes);
 app.get('/', (req: Request, res: Response) => {
   res.json({
     message: 'Welcome to SkillMatch AI API',
-    documentation: '/api-docs',
-    version: '1.0.0',
   });
 });
 

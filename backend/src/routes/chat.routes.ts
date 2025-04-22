@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { validate } from '../middleware/validation.middleware';
 import { authenticate } from '../middleware/auth.middleware';
@@ -25,7 +25,7 @@ const router = express.Router();
  *       401:
  *         description: Unauthorized
  */
-router.get('/messages', authenticate, (req, res) => {
+router.get('/messages', authenticate, (req: Request, res: Response) => {
   // This would be implemented in the controller
   res.status(200).json({
     message: 'This endpoint would return chat messages',
@@ -47,7 +47,7 @@ router.get('/messages', authenticate, (req, res) => {
  *       401:
  *         description: Unauthorized
  */
-router.get('/contacts', authenticate, (req, res) => {
+router.get('/contacts', authenticate, (req: Request, res: Response) => {
   // This would be implemented in the controller
   res.status(200).json({
     message: 'This endpoint would return chat contacts',
@@ -93,7 +93,7 @@ router.post(
     body('content').notEmpty().withMessage('Message content is required'),
     validate,
   ],
-  (req, res) => {
+  (req: Request, res: Response) => {
     // This would be implemented in the controller
     res.status(201).json({
       message: 'This endpoint would send a message',
@@ -103,7 +103,6 @@ router.post(
 );
 
 /**
- * @swagger
  * /api/chat/mark-read:
  *   put:
  *     summary: Mark messages as read
@@ -138,7 +137,7 @@ router.put(
     body('messageIds').isArray().withMessage('Message IDs must be an array'),
     validate,
   ],
-  (req, res) => {
+  (req: Request, res: Response) => {
     // This would be implemented in the controller
     res.status(200).json({
       message: 'This endpoint would mark messages as read',

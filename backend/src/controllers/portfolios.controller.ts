@@ -95,7 +95,8 @@ export const getMyPortfolio = async (
         },
       });
 
-      return res.status(200).json({ portfolio: newPortfolio });
+      res.status(200).json({ portfolio: newPortfolio });
+      return
     }
 
     res.status(200).json({ portfolio });

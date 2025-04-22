@@ -211,7 +211,7 @@ export const updatePassword = async (
       const isPasswordValid = await prisma.user.findFirst({
         where: {
           id,
-          password: currentPassword, // In a real app, use bcrypt to compare
+          password: currentPassword,
         },
       });
 

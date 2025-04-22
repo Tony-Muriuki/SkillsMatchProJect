@@ -346,8 +346,8 @@ export const getCareerPaths = async (
       userSkills = userPortfolio.skills.map((ps) => ps.skill.name);
     }
 
-    // Simple career path recommendations (in a real app, you would use more sophisticated AI)
-    // This would typically be an API call to an external service like ChatGPT API
+    // Simple career path recommendations 
+    // This will typically be an API call to an external service 
 
     // Detect user's technical stack
     const hasJavascript = userSkills.some((skill) =>

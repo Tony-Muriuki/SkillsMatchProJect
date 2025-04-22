@@ -127,7 +127,7 @@ export const getAllJobs = async (
 
       // Calculate match percentage for each job
       jobsWithMatchPercentage = jobs.map((job) => {
-        // Simple matching algorithm (could be more sophisticated in a real app)
+        // Simple matching algorithm
         const jobSkillIds = job.skills.map((js) => js.skillId);
         const userSkillIds = userSkills.map((us) => us.skillId);
 
@@ -260,7 +260,6 @@ export const getJobById = async (
     // Check if job is saved by user
     let isSaved = false;
     if (req.user) {
-      // This would be implemented in a real app, for example with a Bookmarks table
       // For simplicity, we're just returning false for now
       isSaved = false;
     }

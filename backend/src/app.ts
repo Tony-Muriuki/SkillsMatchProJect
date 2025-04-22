@@ -53,7 +53,17 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 // Middleware
-app.use(cors());
+// In src/app.ts
+app.use(
+  cors({
+    origin: [
+      'https://skills-match-pro-ject.vercel.app',
+      'http://localhost:4200', // Keeping this for local development
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

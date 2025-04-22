@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "AI-powered skill matching platform backend",
   "main": "dist/server.js",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
@@ -11,7 +14,8 @@
     "lint": "eslint . --ext .ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "seed": "prisma db seed"
   },
   "dependencies": {
     "@prisma/client": "^5.6.0",

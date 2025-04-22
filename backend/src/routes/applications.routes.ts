@@ -191,3 +191,4 @@ router.patch(
  *               scheduledTime:
  *                 type: string
  */
+export default router;

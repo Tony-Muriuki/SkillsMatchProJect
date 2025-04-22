@@ -172,13 +172,21 @@ router.put('/', authenticate, portfoliosController.updatePortfolio);
  *       409:
  *         description: Skill already exists in portfolio
  */
-router.post('/skills', [
-  authenticate,
-  body('name').notEmpty().withMessage('Skill name is required'),
-  body('level').isIn(['Beginner', 'Intermediate', 'Advanced', 'Expert']).withMessage('Valid skill level is required'),
-  body('years').isNumeric().withMessage('Years of experience must be a number'),
-  validate
-], portfoliosController.addSkill);
+router.post(
+  '/skills',
+  [
+    authenticate,
+    body('name').notEmpty().withMessage('Skill name is required'),
+    body('level')
+      .isIn(['Beginner', 'Intermediate', 'Advanced', 'Expert'])
+      .withMessage('Valid skill level is required'),
+    body('years')
+      .isNumeric()
+      .withMessage('Years of experience must be a number'),
+    validate,
+  ],
+  portfoliosController.addSkill
+);
 
 /**
  * @swagger
@@ -203,7 +211,11 @@ router.post('/skills', [
  *       404:
  *         description: Portfolio or skill not found
  */
-router.delete('/skills/:skillId', authenticate, portfoliosController.removeSkill);
+router.delete(
+  '/skills/:skillId',
+  authenticate,
+  portfoliosController.removeSkill
+);
 
 /**
  * @swagger
@@ -225,3 +237,5 @@ router.delete('/skills/:skillId', authenticate, portfoliosController.removeSkill
  *               - field
  *               - startDate
  *             properties:
+ * */
+export default router;

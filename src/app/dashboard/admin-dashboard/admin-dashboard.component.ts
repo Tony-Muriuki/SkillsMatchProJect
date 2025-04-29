@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import en from '@angular/common/locales/en';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -11,6 +11,8 @@ import en from '@angular/common/locales/en';
   styleUrl: './admin-dashboard.component.scss',
 })
 export class AdminDashboardComponent implements OnInit {
+  adminName = ''; // Added adminName property for welcome message
+
   // Dashboard stats
   totalUsers = 15482;
   activeJobs = 1247;
@@ -116,7 +118,27 @@ export class AdminDashboardComponent implements OnInit {
     },
   ];
 
+  constructor(private authService: AuthService) {}
+
   ngOnInit(): void {
+    // Get admin info from auth service
+    const currentUser = this.authService.getStoredUser();
+    if (currentUser) {
+      this.adminName = currentUser.firstName || 'Admin';
+    } else {
+      // Try to load the current user if not available
+      this.authService.getCurrentUser().subscribe({
+        next: (user) => {
+          if (user) {
+            this.adminName = user.firstName || 'Admin';
+          }
+        },
+        error: (err) => {
+          console.error('Error loading user data:', err);
+        },
+      });
+    }
+
     // Initialize chart data - would be implemented with a chart library
     this.initializeCharts();
   }

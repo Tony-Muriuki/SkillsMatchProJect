@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 interface Job {
   id: string;
@@ -40,6 +41,8 @@ export class JobListingsComponent implements OnInit {
   jobs: Job[] = [];
   filteredJobs: Job[] = [];
   isLoading = true;
+  isLoggedIn = false;
+  userRole: string | null = null;
 
   // Filter options
   jobTypes = ['Full-time', 'Part-time', 'Contract', 'Remote'];
@@ -82,7 +85,22 @@ export class JobListingsComponent implements OnInit {
   itemsPerPage = 10;
   totalPages = 1;
 
+  constructor(private authService: AuthService) {}
+
   ngOnInit(): void {
+    // Check authentication status
+    this.isLoggedIn = this.authService.isLoggedIn();
+    const currentUser = this.authService.getStoredUser();
+    if (currentUser) {
+      this.userRole = currentUser.role;
+    }
+
+    // Subscribe to auth changes
+    this.authService.currentUser$.subscribe((user) => {
+      this.isLoggedIn = !!user;
+      this.userRole = user ? user.role : null;
+    });
+
     this.loadJobs();
   }
 
@@ -207,8 +225,49 @@ export class JobListingsComponent implements OnInit {
   }
 
   toggleSaved(job: Job): void {
+    // Check if user is logged in before allowing save
+    if (!this.isLoggedIn) {
+      // Redirect to login or show login modal
+      alert('Please sign in to save jobs');
+      return;
+    }
+
     job.isSaved = !job.isSaved;
     // In a real app, would call a service to update the saved status
+  }
+
+  applyToJob(jobId: string): void {
+    // Check if user is logged in before allowing application
+    if (!this.isLoggedIn) {
+      // Redirect to login or show login modal
+      alert('Please sign in to apply for jobs');
+      return;
+    }
+
+    if (this.userRole === 'recruiter') {
+      alert('Recruiters cannot apply to jobs');
+      return;
+    }
+
+    // Handle application logic
+    console.log(`Applying to job ${jobId}`);
+    // In a real app, would navigate to application page or open modal
+  }
+
+  postJob(): void {
+    // Check if user is logged in and is a recruiter
+    if (!this.isLoggedIn) {
+      alert('Please sign in to post jobs');
+      return;
+    }
+
+    if (this.userRole !== 'recruiter') {
+      alert('Only recruiters can post jobs');
+      return;
+    }
+
+    // Navigate to job posting page or open modal
+    console.log('Navigating to job posting form');
   }
 
   applyFilters(): void {

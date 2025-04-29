@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 interface JobPost {
   id: string;
@@ -49,7 +50,7 @@ interface Message {
   styleUrl: './recruiter-dashboard.component.scss',
 })
 export class RecruiterDashboardComponent implements OnInit {
-  userName = 'Sarah';
+  userName = 'Sarah'; // Default name, will be updated
   companyName = 'TechCorp Inc.';
 
   // Dashboard stats
@@ -64,7 +65,29 @@ export class RecruiterDashboardComponent implements OnInit {
   upcomingInterviews: Interview[] = [];
   recentMessages: Message[] = [];
 
+  constructor(private authService: AuthService) {}
+
   ngOnInit(): void {
+    // Get user info from auth service
+    const currentUser = this.authService.getStoredUser();
+    if (currentUser) {
+      this.userName = currentUser.firstName || this.userName;
+      this.companyName = currentUser.companyName || this.companyName;
+    } else {
+      // Try to load the current user if not available
+      this.authService.getCurrentUser().subscribe({
+        next: (user) => {
+          if (user) {
+            this.userName = user.firstName || this.userName;
+            this.companyName = user.companyName || this.companyName;
+          }
+        },
+        error: (err) => {
+          console.error('Error loading user data:', err);
+        },
+      });
+    }
+
     this.loadDashboardData();
   }
 

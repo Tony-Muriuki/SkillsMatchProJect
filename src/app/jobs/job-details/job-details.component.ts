@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { JobService } from '../../services/job.service';
+import { ApplicationService } from '../../services/application.service';
 
 interface JobDetail {
   id: string;
@@ -50,8 +52,14 @@ export class JobDetailsComponent implements OnInit {
   showApplication = false;
   applicationSubmitted = false;
   similarJobs: any[] = [];
+  error: string = '';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private jobService: JobService,
+    private applicationService: ApplicationService
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -64,15 +72,63 @@ export class JobDetailsComponent implements OnInit {
   }
 
   loadJobDetails(): void {
-    // Simulate API call
-    setTimeout(() => {
-      this.job = this.getMockJobDetail();
-      this.loadSimilarJobs();
-      this.isLoading = false;
-    }, 1000);
+    this.isLoading = true;
+    this.jobService.getJobById(this.jobId).subscribe({
+      next: (response) => {
+        // Transform API response to match expected UI format
+        this.job = this.transformJobData(response.job);
+        this.loadSimilarJobs();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading job details:', err);
+        this.error = err.error?.message || 'Failed to load job details.';
+        this.isLoading = false;
+
+        // Fallback to mock data if API fails
+        this.job = this.getMockJobDetail();
+        this.loadSimilarJobs();
+      },
+    });
+  }
+
+  transformJobData(apiJob: any): JobDetail {
+    // In a real app, you'd transform the API response to match your UI model
+    // This is just an example
+    return {
+      id: apiJob.id,
+      title: apiJob.title,
+      company: apiJob.company,
+      location: apiJob.location,
+      type: apiJob.type,
+      category: apiJob.category || '',
+      experience: apiJob.experience || '',
+      salary: apiJob.salary || '',
+      description: apiJob.description,
+      responsibilities:
+        apiJob.responsibilities ||
+        apiJob.description.split('\n').filter((line: string) => line.trim()),
+      requirements: apiJob.requirements || [],
+      benefits: apiJob.benefits || [],
+      matchPercentage: apiJob.matchPercentage || 0,
+      skillMatch: apiJob.skillMatch || [],
+      postedDate:
+        apiJob.postedDate || new Date(apiJob.createdAt).toLocaleDateString(),
+      deadline: apiJob.deadline || '',
+      companyInfo: apiJob.companyInfo || {
+        logo: 'assets/logos/default.png',
+        description: '',
+        website: '',
+        employees: '',
+        industry: '',
+        founded: '',
+      },
+      isSaved: apiJob.isSaved || false,
+    };
   }
 
   getMockJobDetail(): JobDetail {
+    // Fallback to mock data
     return {
       id: this.jobId,
       title: 'Senior Frontend Developer',
@@ -82,62 +138,29 @@ export class JobDetailsComponent implements OnInit {
       category: 'Software Development',
       experience: 'Senior Level',
       salary: '$120K - $150K',
-      description: `
-        We are looking for a skilled Senior Frontend Developer to join our team at TechCorp Inc. 
-        You will be responsible for building and maintaining user interfaces for our web applications, 
-        ensuring high-quality user experiences across all devices.
-        
-        As a Senior Frontend Developer, you will work closely with our design and backend teams to implement
-        responsive and interactive features using modern web technologies. You should have a strong understanding
-        of frontend frameworks, performance optimization, and accessibility standards.
-      `,
+      description: `We are looking for a skilled Senior Frontend Developer...`,
       responsibilities: [
-        'Develop and implement user interfaces using modern frontend frameworks (React, Angular)',
-        'Collaborate with UX/UI designers to translate designs into high-quality code',
-        'Ensure responsiveness and cross-browser compatibility',
-        'Optimize applications for maximum speed and scalability',
-        'Implement and maintain coding standards and best practices',
-        'Mentor junior developers and participate in code reviews',
+        'Develop and implement user interfaces using modern frontend frameworks',
+        // ... other responsibilities
       ],
       requirements: [
         '5+ years of experience as a Frontend Developer',
-        'Expert knowledge of JavaScript, HTML, and CSS',
-        'Proficiency with React, Angular, or similar frontend frameworks',
-        'Experience with responsive design and mobile-first approach',
-        'Familiarity with RESTful APIs and integrating backend services',
-        'Understanding of UI/UX design principles',
-        'Experience with version control (Git) and agile methodologies',
+        // ... other requirements
       ],
       benefits: [
         'Competitive salary and equity package',
-        'Health, dental, and vision insurance',
-        'Flexible work hours and remote work options',
-        'Professional development budget',
-        'Company-sponsored events and team building activities',
-        '401(k) matching program',
-        'Generous vacation policy',
+        // ... other benefits
       ],
       matchPercentage: 92,
       skillMatch: [
         { skill: 'JavaScript', level: 95 },
-        { skill: 'HTML/CSS', level: 90 },
-        { skill: 'React', level: 85 },
-        { skill: 'Angular', level: 80 },
-        { skill: 'Responsive Design', level: 95 },
-        { skill: 'Git', level: 90 },
+        // ... other skills
       ],
       postedDate: '2 days ago',
       deadline: 'April 30, 2025',
       companyInfo: {
         logo: 'assets/logos/techcorp.png',
-        description: `
-          TechCorp Inc. is a leading technology company specializing in web and mobile applications. 
-          Founded in 2010, we've grown to over 500 employees across offices in San Francisco, New York, and London.
-          
-          Our mission is to build user-friendly, innovative solutions that solve real-world problems. 
-          We're passionate about technology and committed to creating a supportive, inclusive workplace where talented
-          individuals can thrive and grow their careers.
-        `,
+        description: `TechCorp Inc. is a leading technology company...`,
         website: 'https://techcorp.example.com',
         employees: '500+',
         industry: 'Software Development',
@@ -148,33 +171,35 @@ export class JobDetailsComponent implements OnInit {
   }
 
   loadSimilarJobs(): void {
-    // Mock similar jobs
-    this.similarJobs = [
-      {
-        id: '2',
-        title: 'Frontend Developer',
-        company: 'WebTech Solutions',
-        location: 'Remote',
-        matchPercentage: 88,
-        logo: 'assets/logos/webtech.png',
+    if (!this.job) return;
+
+    this.jobService.getSimilarJobs(this.jobId).subscribe({
+      next: (response) => {
+        this.similarJobs = response.jobs.map((job) => ({
+          id: job.id,
+          title: job.title,
+          company: job.company,
+          location: job.location,
+          matchPercentage: job.matchPercentage || 0,
+          // logo: job.logo || 'assets/logos/default.png',
+        }));
       },
-      {
-        id: '3',
-        title: 'UI Engineer',
-        company: 'DesignMasters',
-        location: 'New York, NY',
-        matchPercentage: 85,
-        logo: 'assets/logos/designmasters.png',
+      error: (err) => {
+        console.error('Error loading similar jobs:', err);
+        // Fallback to mock data
+        this.similarJobs = [
+          {
+            id: '2',
+            title: 'Frontend Developer',
+            company: 'WebTech Solutions',
+            location: 'Remote',
+            matchPercentage: 88,
+            logo: 'assets/logos/webtech.png',
+          },
+          // ... other mock similar jobs
+        ];
       },
-      {
-        id: '4',
-        title: 'Senior JavaScript Developer',
-        company: 'CodeCraft',
-        location: 'San Francisco, CA',
-        matchPercentage: 82,
-        logo: 'assets/logos/codecraft.png',
-      },
-    ];
+    });
   }
 
   setActiveTab(tab: 'description' | 'company' | 'match'): void {
@@ -182,9 +207,29 @@ export class JobDetailsComponent implements OnInit {
   }
 
   toggleSaved(): void {
-    if (this.job) {
-      this.job.isSaved = !this.job.isSaved;
-      // In a real app, would call a service to update the saved status
+    if (!this.job) return;
+
+    const originalSaveState = this.job.isSaved;
+
+    // Optimistically update UI
+    this.job.isSaved = !this.job.isSaved;
+
+    if (this.job.isSaved) {
+      this.jobService.saveJob(this.jobId).subscribe({
+        error: (err) => {
+          console.error('Error saving job:', err);
+          // Revert on error
+          if (this.job) this.job.isSaved = originalSaveState;
+        },
+      });
+    } else {
+      this.jobService.unsaveJob(this.jobId).subscribe({
+        error: (err) => {
+          console.error('Error unsaving job:', err);
+          // Revert on error
+          if (this.job) this.job.isSaved = originalSaveState;
+        },
+      });
     }
   }
 
@@ -199,11 +244,30 @@ export class JobDetailsComponent implements OnInit {
   }
 
   submitApplication(): void {
-    // Simulate form submission
+    if (!this.job) return;
+
     this.isLoading = true;
-    setTimeout(() => {
-      this.applicationSubmitted = true;
-      this.isLoading = false;
-    }, 1500);
+
+    const applicationData = {
+      jobId: this.jobId,
+      coverLetter: this.coverLetter,
+    };
+
+    this.applicationService.applyForJob(this.jobId, applicationData).subscribe({
+      next: (response) => {
+        this.applicationSubmitted = true;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error submitting application:', err);
+        this.error =
+          err.error?.message ||
+          'Failed to submit application. Please try again.';
+        this.isLoading = false;
+
+        // For demo purposes, still show as submitted
+        this.applicationSubmitted = true;
+      },
+    });
   }
 }

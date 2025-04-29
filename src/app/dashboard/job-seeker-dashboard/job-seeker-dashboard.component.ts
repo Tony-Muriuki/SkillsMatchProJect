@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 interface Skill {
   name: string;
@@ -43,7 +44,7 @@ interface CareerSuggestion {
   styleUrl: './job-seeker-dashboard.component.scss',
 })
 export class JobSeekerDashboardComponent implements OnInit {
-  userName = 'John';
+  userName = 'John'; // Default name, will be updated
   jobTitle = 'Frontend Developer';
   experience = '3 years';
   skills: Skill[] = [];
@@ -57,7 +58,27 @@ export class JobSeekerDashboardComponent implements OnInit {
   applicationsCount = 5;
   interviewsCount = 2;
 
+  constructor(private authService: AuthService) {}
+
   ngOnInit(): void {
+    // Get user info from auth service
+    const currentUser = this.authService.getStoredUser();
+    if (currentUser) {
+      this.userName = currentUser.firstName || this.userName;
+    } else {
+      // Try to load the current user if not available
+      this.authService.getCurrentUser().subscribe({
+        next: (user) => {
+          if (user) {
+            this.userName = user.firstName || this.userName;
+          }
+        },
+        error: (err) => {
+          console.error('Error loading user data:', err);
+        },
+      });
+    }
+
     this.loadUserData();
     this.loadRecommendedJobs();
     this.loadApplications();

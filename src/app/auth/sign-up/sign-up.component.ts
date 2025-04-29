@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -20,12 +21,19 @@ export class SignUpComponent implements OnInit {
   signupForm!: FormGroup;
   isPasswordVisible = false;
   isConfirmPasswordVisible = false;
+  isLoading = false;
+  error: string = '';
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    // Get the role from query params
-    this.route.queryParams.subscribe((params) => {
+    // Get the role from route params
+    this.route.params.subscribe((params) => {
       this.userRole = params['role'] as 'job-seeker' | 'recruiter';
       this.initializeForm();
     });
@@ -63,18 +71,37 @@ export class SignUpComponent implements OnInit {
 
   onSubmit(): void {
     if (this.signupForm.valid) {
-      console.log('Form submitted:', this.signupForm.value);
+      this.isLoading = true;
+      this.error = '';
 
-      // Mock signup - would typically call an auth service
+      // Check if passwords match
+      if (
+        this.signupForm.value.password !== this.signupForm.value.confirmPassword
+      ) {
+        this.error = 'Passwords do not match';
+        this.isLoading = false;
+        return;
+      }
+
       const userData = {
         ...this.signupForm.value,
         role: this.userRole,
       };
 
-      localStorage.setItem('auth', JSON.stringify(userData));
+      // Remove confirmPassword before sending to API
+      delete userData.confirmPassword;
 
-      // Navigate to appropriate dashboard
-      window.location.href = `/dashboard/${this.userRole}`;
+      this.authService.register(userData).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          this.router.navigate([`/dashboard/${this.userRole}`]);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.error =
+            err.error?.message || 'Registration failed. Please try again.';
+        },
+      });
     } else {
       // Mark all fields as touched to show validation errors
       this.signupForm.markAllAsTouched();

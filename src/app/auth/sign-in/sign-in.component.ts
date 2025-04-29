@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -16,19 +17,23 @@ import {
   styleUrl: './sign-in.component.scss',
 })
 export class SignInComponent implements OnInit {
-  toggleAdminMode() {
-    throw new Error('Method not implemented.');
-  }
   userRole: 'job-seeker' | 'recruiter' | 'admin' = 'job-seeker';
   signinForm!: FormGroup;
   isPasswordVisible = false;
+  isLoading = false;
+  error: string = '';
 
   // Computed property to maintain backward compatibility with template
   get isAdminMode(): boolean {
     return this.userRole === 'admin';
   }
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     // Get the role from query params if available
@@ -64,18 +69,39 @@ export class SignInComponent implements OnInit {
 
   onSubmit(): void {
     if (this.signinForm.valid) {
-      console.log('Form submitted:', this.signinForm.value);
+      this.isLoading = true;
+      this.error = '';
 
-      // Mock signin - would typically call an auth service
-      const userData = {
+      const credentials = {
         ...this.signinForm.value,
         role: this.userRole,
       };
 
-      localStorage.setItem('auth', JSON.stringify(userData));
-
-      // Navigate to appropriate dashboard
-      window.location.href = `/dashboard/${this.userRole}`;
+      if (this.userRole === 'admin') {
+        this.authService.adminLogin(credentials).subscribe({
+          next: (response) => {
+            this.isLoading = false;
+            this.router.navigate(['/dashboard/admin']);
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.error =
+              err.error?.message || 'Failed to sign in. Please try again.';
+          },
+        });
+      } else {
+        this.authService.login(credentials).subscribe({
+          next: (response) => {
+            this.isLoading = false;
+            this.router.navigate([`/dashboard/${this.userRole}`]);
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.error =
+              err.error?.message || 'Failed to sign in. Please try again.';
+          },
+        });
+      }
     } else {
       // Mark all fields as touched to show validation errors
       this.signinForm.markAllAsTouched();
@@ -85,6 +111,11 @@ export class SignInComponent implements OnInit {
   // Updated method to select a specific role
   selectRole(role: 'job-seeker' | 'recruiter' | 'admin'): void {
     this.userRole = role;
+    this.initializeForm();
+  }
+
+  toggleAdminMode(): void {
+    this.userRole = this.isAdminMode ? 'job-seeker' : 'admin';
     this.initializeForm();
   }
 }

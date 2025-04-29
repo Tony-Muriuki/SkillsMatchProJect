@@ -5,6 +5,10 @@ import { EnvironmentService } from './environment.service';
 import { Observable } from 'rxjs';
 
 interface UserProfile {
+  title: string;
+  linkedinUrl: string;
+  githubUrl: string;
+  websiteUrl: string;
   id?: string;
   firstName?: string;
   lastName?: string;

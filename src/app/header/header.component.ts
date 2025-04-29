@@ -1,6 +1,14 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  PLATFORM_ID,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -9,32 +17,48 @@ import { RouterModule } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   userRole: 'job-seeker' | 'recruiter' | 'admin' | null = null;
   isMenuOpen = false;
+  private authSubscription: Subscription | null = null;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.checkAuthStatus();
+
+    // Subscribe to auth changes
+    if (isPlatformBrowser(this.platformId)) {
+      this.authSubscription = this.authService.currentUser$.subscribe(
+        (user) => {
+          this.isLoggedIn = !!user;
+          if (user) {
+            this.userRole = user.role || null;
+          } else {
+            this.userRole = null;
+          }
+        }
+      );
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Clean up subscription
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   checkAuthStatus(): void {
     if (isPlatformBrowser(this.platformId)) {
-      const savedAuth = localStorage.getItem('auth');
-      if (savedAuth) {
-        try {
-          const authData = JSON.parse(savedAuth);
-          this.isLoggedIn = true;
-          this.userRole = authData.role;
-        } catch (error) {
-          console.error('Invalid auth data in localStorage', error);
-          // Clear the corrupted data
-          localStorage.removeItem('auth');
-          this.isLoggedIn = false;
-          this.userRole = null;
-        }
+      this.isLoggedIn = this.authService.isLoggedIn();
+      const user = this.authService.getStoredUser();
+      if (user) {
+        this.userRole = user.role || null;
       }
     }
   }
@@ -45,9 +69,7 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('auth');
-      this.isLoggedIn = false;
-      this.userRole = null;
+      this.authService.logout();
       window.location.href = '/';
     }
   }

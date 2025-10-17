@@ -8,7 +8,7 @@ import { Role } from '@prisma/client';
 const router = express.Router();
 
 /**
- * /api/applications:
+
  *   get:
  *     summary: Get all applications for current job seeker
  *     tags: [Applications]

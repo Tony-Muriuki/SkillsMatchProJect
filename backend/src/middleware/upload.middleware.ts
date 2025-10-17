@@ -67,7 +67,6 @@ const fileFilter = (
   }
 };
 
-// Create multer upload instance
 const upload = multer({
   storage,
   fileFilter,

@@ -102,34 +102,6 @@ router.post(
   }
 );
 
-/**
- * /api/chat/mark-read:
- *   put:
- *     summary: Mark messages as read
- *     tags: [Chat]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - messageIds
- *             properties:
- *               messageIds:
- *                 type: array
- *                 items:
- *                   type: string
- *     responses:
- *       200:
- *         description: Messages marked as read
- *       400:
- *         description: Validation error
- *       401:
- *         description: Unauthorized
- */
 router.put(
   '/mark-read',
   [

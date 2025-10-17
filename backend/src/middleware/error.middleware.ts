@@ -3,9 +3,6 @@ import { logger } from '../utils/logger';
 import { AuthRequest } from '../types';
 import { ApiError } from '../utils/ApiError';
 
-/**
- * Global error handling middleware
- */
 const errorMiddleware = (
   err: Error | ApiError,
   req: Request,

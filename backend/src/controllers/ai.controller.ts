@@ -47,7 +47,6 @@ export const matchJobs = async (
       yearsOfExperience: ps.yearsOfExperience,
     }));
 
-    // Fetch all active jobs
     const allJobs = await prisma.job.findMany({
       where: { active: true },
       include: {
@@ -346,8 +345,8 @@ export const getCareerPaths = async (
       userSkills = userPortfolio.skills.map((ps) => ps.skill.name);
     }
 
-    // Simple career path recommendations 
-    // This will typically be an API call to an external service 
+    // Simple career path recommendations
+    // This will typically be an API call to an external service
 
     // Detect user's technical stack
     const hasJavascript = userSkills.some((skill) =>

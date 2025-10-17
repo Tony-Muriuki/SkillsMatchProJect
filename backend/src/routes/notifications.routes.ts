@@ -85,28 +85,6 @@ router.put('/mark-all-read', authenticate, (req, res) => {
   });
 });
 
-/**
- * /api/notifications/{id}:
- *   delete:
- *     summary: Delete a notification
- *     tags: [Notifications]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Notification ID
- *     responses:
- *       200:
- *         description: Notification deleted
- *       401:
- *         description: Unauthorized
- *       404:
- *         description: Notification not found
- */
 router.delete('/:id', authenticate, (req, res) => {
   // This would be implemented in the controller
   res.status(200).json({

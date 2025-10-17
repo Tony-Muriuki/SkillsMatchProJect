@@ -2,9 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { ApiError } from '../utils/ApiError';
 
-/**
- * Middleware to validate request data
- */
 export const validate = (
   req: Request,
   res: Response,

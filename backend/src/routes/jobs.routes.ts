@@ -248,30 +248,6 @@ router.put('/:id', [authenticate, validate], jobsController.updateJob);
  */
 router.delete('/:id', authenticate, jobsController.deleteJob);
 
-/**
- * /api/jobs/{id}/toggle-status:
- *   patch:
- *     summary: Toggle job active status
- *     tags: [Jobs]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Job ID
- *     responses:
- *       200:
- *         description: Job status toggled successfully
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden - only job creator or admin can update
- *       404:
- *         description: Job not found
- */
 router.patch(
   '/:id/toggle-status',
   authenticate,

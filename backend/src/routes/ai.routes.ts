@@ -8,7 +8,7 @@ import { Role } from '@prisma/client';
 const router = express.Router();
 
 /**
- * /api/ai/match-jobs:
+
  *   post:
  *     summary: Match job seeker with jobs based on skills
  *     tags: [AI]

@@ -210,30 +210,6 @@ router.put(
   usersController.updatePassword
 );
 
-/**
- * /api/users/{id}:
- *   delete:
- *     summary: Delete user
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: User ID
- *     responses:
- *       200:
- *         description: User deleted successfully
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden - only own user or admin can delete
- *       404:
- *         description: User not found
- */
 router.delete('/:id', authenticate, usersController.deleteUser);
 
 export default router;

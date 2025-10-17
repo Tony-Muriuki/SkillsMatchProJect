@@ -11,7 +11,7 @@ router.post(
   [authenticate, authorize([Role.JOBSEEKER]), uploadMiddleware.uploadCV],
   (req: Request, res: Response) => {
     res.status(201).json({
-      message: 'This endpoint would upload a CV',
+      message: 'This endpoint will upload a CV',
       info: 'Implementation pending',
       file: req.file,
     });

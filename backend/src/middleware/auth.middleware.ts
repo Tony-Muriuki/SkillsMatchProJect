@@ -13,9 +13,6 @@ interface JwtPayload {
   role: Role;
 }
 
-/**
- * Verifies JWT token and attaches user to request
- */
 export const authenticate = async (
   req: AuthRequest,
   res: Response,

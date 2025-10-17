@@ -217,24 +217,4 @@ router.delete(
   portfoliosController.removeSkill
 );
 
-/**
- * /api/portfolios/education:
- *   post:
- *     summary: Add education to portfolio
- *     tags: [Portfolios]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - school
- *               - degree
- *               - field
- *               - startDate
- *             properties:
- * */
 export default router;

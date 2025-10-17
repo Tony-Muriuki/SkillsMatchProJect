@@ -6,51 +6,6 @@ import * as authController from '../controllers/auth.controller';
 
 const router = express.Router();
 
-/**
- * /api/auth/register:
- *   post:
- *     summary: Register a new user
- *     tags: [Authentication]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *               - firstName
- *               - lastName
- *               - role
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *               password:
- *                 type: string
- *                 minLength: 8
- *               firstName:
- *                 type: string
- *               lastName:
- *                 type: string
- *               role:
- *                 type: string
- *                 enum: [job-seeker, recruiter, admin]
- *               companyName:
- *                 type: string
- *                 description: Required for recruiters
- *               jobTitle:
- *                 type: string
- *                 description: Optional for recruiters
- *     responses:
- *       201:
- *         description: User registered successfully
- *       400:
- *         description: Validation error
- *       409:
- *         description: User already exists
- */
 router.post(
   '/register',
   [
